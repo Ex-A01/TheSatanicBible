@@ -1,0 +1,1492 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Satanic Bible - Portal</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Cinzel & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Cinzel:wght@400;600;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        cinzel: ['Cinzel', 'serif'],
+                        cinzelDeco: ['Cinzel Decorative', 'serif'],
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        infernal: {
+                            950: '#030304',
+                            900: '#07060a',
+                            800: '#0e0b12',
+                            crimson: '#990000',
+                            scarlet: '#ff0000',
+                            gold: '#d97706',
+                            cyan: '#06b6d4'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* CSS Root theme properties for dynamic styling transitions */
+        :root {
+            --theme-altar-glow: rgba(217, 119, 6, 0.4);
+            --theme-altar-border: rgba(217, 119, 6, 0.8);
+            --theme-text-glow: #d97706;
+            --scrollbar-color: #d97706;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #030304;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--scrollbar-color, #990000);
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #ff0000;
+        }
+
+        /* GOTHIC DRIFTING BLOOD TEXT EFFECT */
+        .blood-text {
+            color: #ffffff;
+            font-family: 'Cinzel', serif;
+            letter-spacing: 0.15em;
+            text-shadow: 
+                0 0 4px rgba(255, 255, 255, 0.4),
+                0 4px 10px var(--theme-text-glow, #990000), 
+                0 8px 20px #550000, 
+                0 12px 35px #220000;
+            transition: text-shadow 0.8s ease;
+        }
+
+        /* FLAMING FIRE TEXT EFFECT */
+        .fire-text {
+            text-transform: uppercase;
+            font-family: 'Cinzel Decorative', serif;
+            font-weight: 900;
+            color: #fff5f5;
+            text-shadow: 
+                0 0 4px #fff, 
+                0 -4px 8px #ffcc00, 
+                2px -8px 12px #ff6600, 
+                -2px -15px 20px #ff0000, 
+                2px -20px 25px #b30000,
+                0 -25px 35px #550000;
+            animation: fire-flicker 1.5s infinite alternate ease-in-out;
+            letter-spacing: 0.05em;
+        }
+
+        @keyframes fire-flicker {
+            0% {
+                text-shadow: 
+                    0 0 4px #fff, 
+                    0 -4px 8px #ffcc00, 
+                    2px -8px 12px #ff6600, 
+                    -2px -15px 20px #ff0000, 
+                    2px -20px 25px #b30000,
+                    0 -25px 35px #550000;
+            }
+            50% {
+                text-shadow: 
+                    0 0 5px #fff, 
+                    -1px -3px 6px #ffe600, 
+                    1px -10px 14px #ff5500, 
+                    3px -12px 22px #ff1100, 
+                    -1px -22px 28px #800000,
+                    1px -30px 40px #330000;
+            }
+            100% {
+                text-shadow: 
+                    0 0 3px #fff, 
+                    1px -5px 10px #ffb300, 
+                    -2px -7px 10px #ff7700, 
+                    1px -17px 18px #ee0000, 
+                    3px -18px 22px #b30000,
+                    -1px -24px 30px #550000;
+            }
+        }
+
+        .text-justified {
+            text-align: justify;
+            text-justify: inter-word;
+        }
+
+        /* Gothic altar active state pulsing with dynamic variables */
+        .goth-glow {
+            box-shadow: 0 0 15px var(--theme-altar-glow, rgba(153, 0, 0, 0.4));
+            border-color: var(--theme-altar-border, rgba(153, 0, 0, 0.8)) !important;
+        }
+
+        /* Custom scrollable text panel styles */
+        .goth-scroller::-webkit-scrollbar {
+            width: 4px;
+        }
+        .goth-scroller::-webkit-scrollbar-thumb {
+            background: var(--scrollbar-color, #990000);
+            border-radius: 2px;
+        }
+    </style>
+</head>
+<body class="bg-infernal-950 text-zinc-300 font-sans min-h-screen relative overflow-x-hidden select-none">
+
+    <!-- Ambient particle background -->
+    <canvas id="particleCanvas" class="absolute inset-0 pointer-events-none z-0"></canvas>
+
+    <!-- INTRO OVERLAY -->
+    <div id="decompressionOverlay" class="fixed inset-0 bg-black z-50 flex flex-col items-center justify-center p-6 transition-all duration-1000">
+        <div class="max-w-md w-full text-center flex flex-col items-center space-y-8">
+            <h2 class="font-cinzelDeco text-infernal-crimson text-2xl md:text-3xl tracking-widest fire-text">THE SATANIC BIBLE</h2>
+            
+            <!-- Elegant Perfect Inverted Pentagram Sigil -->
+            <div id="bellTrigger" class="relative w-44 h-44 flex items-center justify-center cursor-pointer group" onclick="tollBell()">
+                <svg class="w-full h-full text-zinc-900 group-hover:text-infernal-crimson transition-colors duration-500 transform group-hover:scale-105 duration-300" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="1.2">
+                    <circle cx="50" cy="50" r="45" />
+                    <circle cx="50" cy="50" r="41" stroke-dasharray="2 2" />
+                    <!-- Flawless Inverted 5-pointed star aligned exactly inside circle of radius 41 -->
+                    <polygon points="50,88 72.3,19.3 13.9,61.7 86.1,61.7 27.7,19.3" />
+                </svg>
+                <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                    <span id="bellIndicator" class="text-xs font-cinzel text-zinc-500 tracking-widest uppercase transition-all duration-300">PURIFIER (0/9)</span>
+                </div>
+            </div>
+
+            <div class="space-y-4">
+                <p id="overlayTitle" class="font-cinzel text-sm text-zinc-500 tracking-widest uppercase">Chambre de décompression intellectuelle</p>
+                <p id="overlayDesc" class="text-xs text-zinc-600 max-w-xs mx-auto leading-relaxed">
+                    Faites retentir le gong sacré 9 fois pour purifier l'atmosphère mentale et rejeter les inhibitions du monde profane avant d'entrer.
+                </p>
+            </div>
+
+            <button onclick="bypassIntro()" class="text-[10px] font-cinzel text-zinc-700 hover:text-infernal-crimson tracking-widest transition-colors duration-300 uppercase">
+                [ Passer l'introduction / Bypass ]
+            </button>
+        </div>
+    </div>
+
+    <!-- MAIN INTERFACE -->
+    <div id="mainContent" class="opacity-0 transition-opacity duration-1000 relative z-10 max-w-5xl mx-auto px-6 py-12 flex flex-col min-h-screen">
+        
+        <!-- Header Controls -->
+        <header class="flex justify-between items-center border-b border-zinc-900 pb-6 mb-12">
+            <div class="flex items-center space-x-3">
+                <span class="font-cinzel text-infernal-crimson font-black text-xl tracking-wider">🜏</span>
+                <span id="headerLogoText" class="text-xs tracking-widest font-cinzel text-zinc-500 uppercase hidden md:inline">The Satanic Bible - Portal</span>
+            </div>
+            
+            <div class="flex items-center space-x-6">
+                <!-- Audio Ambient Toggle -->
+                <button id="soundToggle" onclick="toggleAmbience()" class="text-xs tracking-widest font-cinzel text-zinc-500 hover:text-infernal-crimson transition-colors duration-300 flex items-center space-x-2">
+                    <span id="soundWaves" class="inline-block w-2.5 h-2.5 rounded-full bg-zinc-800 transition-all duration-300"></span>
+                    <span id="soundText">AMBIANCE : OFF</span>
+                </button>
+
+                <!-- Language Selector -->
+                <div class="flex items-center space-x-1 border border-zinc-900 rounded px-2.5 py-1 text-xs font-cinzel">
+                    <button id="langEN" onclick="setLanguage('en')" class="px-2 py-0.5 text-zinc-600 hover:text-infernal-crimson transition-colors duration-300">EN</button>
+                    <span class="text-zinc-800">|</span>
+                    <button id="langFR" onclick="setLanguage('fr')" class="px-2 py-0.5 text-zinc-600 hover:text-infernal-crimson transition-colors duration-300">FR</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- CORE TEXT VIEWER -->
+        <main class="min-h-[500px]">
+            <div id="bookView" class="transition-all duration-500">
+                <!-- Injected dynamically via JS -->
+            </div>
+        </main>
+
+        <!-- STATEMENT DETAILS PANEL (Responsive sliding drawer) -->
+        <div id="detailsPanel" class="fixed bottom-0 left-0 right-0 bg-black/98 border-t border-zinc-900 p-6 md:p-8 transform translate-y-full transition-all duration-500 ease-out z-40 hidden shadow-[0_-15px_30px_rgba(0,0,0,0.8)]">
+            <div class="max-w-3xl mx-auto relative">
+                <button onclick="closeDetails()" id="closeDetailsBtn" class="absolute -top-2 right-0 text-zinc-500 hover:text-infernal-crimson text-xl font-cinzel transition-colors duration-300">✕</button>
+                <div class="pr-8">
+                    <span id="detailsLabel" class="text-[10px] font-cinzel text-infernal-crimson tracking-widest uppercase">Élucidation Moderne</span>
+                    <h3 id="detailsTitle" class="font-cinzel text-base md:text-lg text-zinc-200 mt-2 mb-4 tracking-wider leading-relaxed"></h3>
+                    <p id="detailsContent" class="text-xs md:text-sm text-zinc-400 leading-relaxed font-light text-justified"></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- THE ALTAR OF THE BOOKS (Navigation Pedestal) -->
+        <section class="mt-16 mb-12 border-t border-zinc-900 pt-10">
+            <h3 class="font-cinzel text-center text-xs tracking-widest text-zinc-600 uppercase mb-8" id="altarLabel">L'Autel des Livres / Selection Altar</h3>
+            
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-4" id="altarGrid">
+                <!-- Prologue & Statements -->
+                <button onclick="switchBook('prologue')" id="altar-prologue" class="border border-zinc-900 bg-zinc-950/40 p-4 rounded-lg flex flex-col items-center space-y-2 hover:border-zinc-100/50 transition-all duration-300">
+                    <span class="text-lg">🜏</span>
+                    <span id="altarText-prologue" class="font-cinzel text-[10px] tracking-widest uppercase text-center text-zinc-400">PROLOGUE & CODES</span>
+                </button>
+
+                <!-- Book 1: Satan -->
+                <button onclick="switchBook('satan')" id="altar-satan" class="border border-zinc-900 bg-zinc-950/40 p-4 rounded-lg flex flex-col items-center space-y-2 hover:border-infernal-crimson/50 transition-all duration-300">
+                    <span class="text-lg text-red-600">🜂</span>
+                    <span id="altarText-satan" class="font-cinzel text-[10px] tracking-widest uppercase text-center text-zinc-400">LIVRE DE SATAN</span>
+                    <span id="altarSub-satan" class="text-[8px] text-zinc-600 font-sans tracking-wide uppercase">[FEU]</span>
+                </button>
+
+                <!-- Book 2: Lucifer (Active Book) -->
+                <button onclick="switchBook('lucifer')" id="altar-lucifer" class="border border-zinc-900 bg-zinc-950/40 p-4 rounded-lg flex flex-col items-center space-y-2 hover:border-cyan-500/50 transition-all duration-300">
+                    <span class="text-lg text-cyan-500">🜁</span>
+                    <span id="altarText-lucifer" class="font-cinzel text-[10px] tracking-widest uppercase text-center text-zinc-400">LIVRE DE LUCIFER</span>
+                    <span id="altarSub-lucifer" class="text-[8px] text-cyan-500 font-sans tracking-wide uppercase">[AIR]</span>
+                </button>
+
+                <!-- Book 3: Belial (Teaser) -->
+                <div class="border border-zinc-900/40 bg-zinc-950/20 p-4 rounded-lg flex flex-col items-center space-y-2 opacity-50 relative group cursor-not-allowed">
+                    <span class="text-lg text-zinc-700">🜃</span>
+                    <span id="altarText-belial" class="font-cinzel text-[10px] tracking-widest uppercase text-center text-zinc-600">LIVRE DE BELIAL</span>
+                    <span id="altarSub-belial" class="text-[8px] text-zinc-700 font-sans tracking-wide uppercase">[TERRE]</span>
+                    <div class="absolute inset-0 bg-black/90 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center rounded-lg p-2 text-center">
+                        <span id="altarTeaser-belial" class="text-[8px] font-cinzel text-zinc-500 uppercase tracking-widest">WIP</span>
+                    </div>
+                </div>
+
+                <!-- Book 4: Leviathan (Teaser) -->
+                <div class="border border-zinc-900/40 bg-zinc-950/20 p-4 rounded-lg flex flex-col items-center space-y-2 opacity-50 relative group cursor-not-allowed">
+                    <span class="text-lg text-zinc-700">🜄</span>
+                    <span id="altarText-leviathan" class="font-cinzel text-[10px] tracking-widest uppercase text-center text-zinc-600">LIVRE DE LEVIATHAN</span>
+                    <span id="altarSub-leviathan" class="text-[8px] text-zinc-700 font-sans tracking-wide uppercase">[EAU]</span>
+                    <div class="absolute inset-0 bg-black/90 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center rounded-lg p-2 text-center">
+                        <span id="altarTeaser-leviathan" class="text-[8px] font-cinzel text-zinc-500 uppercase tracking-widest">WIP</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FOOTER -->
+        <footer class="mt-auto border-t border-zinc-950 pt-8 text-center text-[10px] text-zinc-700 font-cinzel tracking-widest space-y-3">
+            <p id="footerCopyright">© 1969 - 2026 THE SATANIC BIBLE - MODERNIZED ADAPTATION</p>
+            <p id="footerConcept" class="text-zinc-800 font-bold">REJET DU THÉISME — GLORIFICATION DE LA RAISON & DE L'INDIVIDUALISME</p>
+        </footer>
+    </div>
+
+    <!-- MAIN INTERACTIVE SCRIPT -->
+    <script>
+        // AUDIO AND CONTENT CONFIGURATION
+        const AUDIO_CONFIG = {
+            useExternalFile: false,
+            externalUrl: 'path/to/soundloop.ogg', 
+            volume: 0.25 
+        };
+
+        const CONTENT = {
+            en: {
+                title: "The Satanic Bible - Portal",
+                headerLogoText: "The Satanic Bible - Part I",
+                overlayTitle: "Intellectual Decompression Chamber",
+                overlayDesc: "Toll the sacred gong 9 times to purify the mental atmosphere and shatter profane dogmatic bindings before entering.",
+                altarLabel: "The Altar of the Left Hand Path",
+                detailsLabel: "Rational Elucidation",
+                cardReadMore: "[ DECODE VALUE ]",
+                prologueHeader: "PROLOGUE",
+                statementsHeader: "THE NINE SATANIC STATEMENTS",
+                statementsSubtitle: "The foundational codex of individual sovereignty",
+                footerCopyright: "© 1969 - 2026 THE SATANIC BIBLE - MODERNIZED ADAPTATION",
+                footerConcept: "REJECTION OF THEISM — GLORIFICATION OF REASON & INDIVIDUAL SOVEREIGNTY",
+                altar: {
+                    prologue: "PROLOGUE & CODES",
+                    satan: "THE BOOK OF SATAN",
+                    satanSub: "[FIRE]",
+                    lucifer: "THE BOOK OF LUCIFER",
+                    luciferSub: "[AIR]",
+                    belial: "THE BOOK OF BELIAL",
+                    belialSub: "[EARTH]",
+                    leviathan: "THE BOOK OF LEVIATHAN",
+                    leviathanSub: "[WATER]",
+                    teaser: "WIP"
+                },
+                prologue: `<p>The gods of the right-hand path have bickered and quarreled for an entire age of earth. Each of these deities and their respective priests and ministers have attempted to find wisdom in their own lies. The ice age of religious thought can last but a limited time in this great scheme of human existence. The gods of wisdom-defiled have had their saga, and their millennium hath become as reality.</p>
+                <p>Each, with his own "divine" path to paradise, hath accused the other of heresies and spiritual indiscretions. The Ring of the Nibelungen doth carry an everlasting curse, but only because those who seek it think in terms of "Good" and "Evil" - themselves being at all times "Good". The gods of the past have become as their own devils in order to live. Feebly, their ministers play the devil's game to fill their tabernacles and pay the mortgages on their temples. Alas, too long have they studied "righteousness", and poor and incompetent devils they make.</p>
+                <p>So they all join hands in "brotherly" unity, and in their desperation go to Valhalla for their last great ecumenical council. "Draweth near in the gloom the twilight of the gods." The ravens of night have flown forth to summon Loki, who hath set Valhalla aflame with the searing trident of the Inferno.</p>
+                <p>The twilight is done. A glow of new light is borne out of the night and Lucifer is risen, once more to proclaim: "This is the age of Satan! Satan Rules the Earth!" The gods of the unjust are dead. This is the morning of magic, and undefiled wisdom. The FLESH prevaileth and a great Church shall be builded, consecrated in its name. No longer shall man's salvation be dependent on his self-denial. And it will be known that the world of the flesh and the living shall be the greatest preparation for any and all eternal delights!</p>`,
+                statements: [
+                    { num: 1, text: "Satan represents indulgence, instead of abstinence!", explication: "Life is meant to be lived with earthly, physical and emotional gratification. Denying one's natural instincts creates psychological damage and false piety." },
+                    { num: 2, text: "Satan represents vital existence, instead of spiritual pipe dreams!", explication: "The tangible reality of the here and now is our only absolute. Escapist spiritual fantasies waste the limited, precious existence we are guaranteed." },
+                    { num: 3, text: "Satan represents undefiled wisdom, instead of hypocritical self-deceit!", explication: "Honesty with oneself is the ultimate merit. Accepting human nature as it is beats building fragile realities upon antiquated dogmas and unproven mythologies." },
+                    { num: 4, text: "Satan represents kindness to those who deserve it, instead of love wasted on ingrates!", explication: "Indiscriminate love dilutes its value. True affection and respect should be selectively given to those who earn it, not wasted on parasitical individuals." },
+                    { num: 5, text: "Satan represents vengeance, instead of turning the other cheek!", explication: "Turning the other cheek encourages predators. Returning force with equal force ensures personal safety, self-respect, and sets clear, natural boundaries." },
+                    { num: 6, text: "Satan represents responsibility to the responsible, instead of concern for psychic vampires!", explication: "Do not feel indebted to emotional parasites. Safeguard your energy and care only for those who actively contribute and take accountability for their lives." },
+                    { num: 7, text: "Satan represents man as just another animal, sometimes better, more often worse than those that walk on all-fours, who, because of his 'divine spiritual and intellectual development', has become the most vicious animal of all!", explication: "Man is not separate from nature. Elevating ourselves through spiritual hubris only makes us blind to our base bestial instincts, leading to unchecked cruelty." },
+                    { num: 8, text: "Satan represents all of the so-called sins, as they all lead to physical, mental, or emotional gratification!", explication: "What traditional churches label 'sins' are merely basic physical and emotional drivers. Embracing them safely eliminates guilt-induced pathologies." },
+                    { num: 9, text: "Satan has been the best friend the church has ever had, as he has kept it in business all these years!", explication: "Without a powerful, constructed villain to blame for human nature, restrictive control systems of white-light institutions would instantly collapse." }
+                ],
+                bookSatan: {
+                    title: "THE BOOK OF SATAN",
+                    subtitle: "THE INFERNAL DIATRIBE",
+                    intro: "The first book of the Satanic Bible is not an attempt to blaspheme as much as it is a statement of what might be termed 'diabolical indignation'. Read on and learn the Law.",
+                    chapters: [
+                        {
+                            num: "I",
+                            verses: [
+                                "In this arid wilderness of steel and stone I raise up my voice that you may hear. To the East and to the West I beckon. To the North and to the South I show a sign proclaiming: Death to the weakling, wealth to the strong!",
+                                "Open your eyes that you may see, Oh men of mildewed minds, and listen to me ye bewildered millions!",
+                                "For I stand forth to challenge the wisdom of the world; to interrogate the \"laws\" of man and of \"God\"!",
+                                "I request reason for your golden rule and ask the why and wherefore of your ten commandments.",
+                                "Before none of your printed idols do I bend in acquiescence, and he who saith \"thou shalt\" to me is my mortal foe!",
+                                "I dip my forefinger in the watery blood of your impotent mad redeemer, and write over his thorn-torn brow: The TRUE prince of evil - the king of slaves!",
+                                "No hoary falsehood shall be a truth to me; no stifling dogma shall encramp my pen!",
+                                "I break away from all conventions that do not lead to my earthly success and happiness.",
+                                "I raise up in stern invasion the standard of the strong!",
+                                "I gaze into the glassy eye of your fearsome Jehovah, and pluck him by the beard; I uplift a broad-axe, and split open his worm-eaten skull!",
+                                "I blast out the ghastly contents of philosophically whited sepulchers and laugh with sardonic wrath!"
+                            ]
+                        },
+                        {
+                            num: "II",
+                            verses: [
+                                "Behold the crucifix; what does it symbolize? Pallid incompetence hanging on a tree.",
+                                "I question all things. As I stand before the festering and varnished facades of your haughtiest moral dogmas, I write thereon in letters of blazing scorn: Lo and behold; all this is fraud!",
+                                "Gather around me, Oh! ye death-defiant, and the earth itself shall be thine, to have and to hold!",
+                                "Too long the dead hand has been permitted to sterilize living thought!",
+                                "Too long right and wrong, good and evil have been inverted by false prophets!",
+                                "No creed must be accepted upon authority of a \"divine\" nature. Religions must be put to the question. No moral dogma must be taken for granted - no standard of measurement deified. There is nothing inherently sacred about moral codes. Like the wooden idols of long ago, they are the work of human hands, and what man has made, man can destroy!",
+                                "He that is slow to believe anything and everything is of great understanding, for belief in one false principle is the beginning of all unwisdom.",
+                                "The chief duty of every new age is to upraise new men to determine its liberties, to lead it towards material success - to rend the rusty padlocks and chains of dead custom that always prevent healthy expansion. Theories and ideas that may have meant life and hope and freedom for our ancestors may now mean destruction, slavery, and dishonor to us!",
+                                "As environments change, no human ideal standeth sure!",
+                                "Whenever, therefore, a lie has built unto itself a throne, let it be assailed without pity and without regret, for under the domination of an inconvenient falsehood, no one can prosper.",
+                                "Let established sophisms be dethroned, rooted out, burnt and destroyed, for they are a standing menace to all true nobility of thought and action!",
+                                "Whatever alleged \"truth\" is proven by results to be but an empty fiction, let it be unceremoniously flung into the outer darkness, among the dead gods, dead empires, dead philosophies, and other useless lumber and wreckage!",
+                                "The most dangerous of all enthroned lies is the holy, the sanctified, the privileged lie - the lie everyone believes to be a model truth. It is the fruitful mother of all other popular errors and delusions. It is a hydra-headed tree of unreason with a thousand roots. It is a social cancer!",
+                                "The lie that is known to be a lie is half eradicated, but the lie that even intelligent persons accept as fact - the lie that has been inculcated in a little child at its mother's knee - is more dangerous to contend against than a creeping pestilence!",
+                                "Popular lies have ever been the most potent enemies of personal liberty. There is only one way to deal with them: Cut them out, to the very core, just as cancers. Exterminate them root and branch. Annihilate them, or they will us!"
+                            ]
+                        },
+                        {
+                            num: "III",
+                            verses: [
+                                "\"Love one another\" it has been said is the supreme law, but what power made it so? Upon what rational authority does the gospel of love rest? Why should I not hate mine enemies - if I \"love\" them does that not place me at their mercy?",
+                                "Is it natural for enemies to do good unto each other - and WHAT IS GOOD?",
+                                "Can the torn and bloody victim \"love\" the blood-splashed jaws that rend him limb from limb?",
+                                "Are we not all predatory animals by instinct? If humans ceased wholly from preying upon each other (to traquer mutuellement comme des proies), could they continue to exist?",
+                                "Is not \"lust and carnal desire\" a more truthful term to describe \"love\" when applied to the continuance of the race? Is not the \"love\" of the fawning scriptures simply a euphemism for sexual activity, or was the \"great teacher\" a glorifier of eunuchs?",
+                                "Love your enemies and do good to them that hate and use you - is this not the despicable philosophy of the spaniel that rolls upon its back when kicked?",
+                                "Hate your enemies with a whole heart, and if a man smite you on one cheek, SMASH him on the other!; smite him hip and thigh, for self-preservation is the highest law!",
+                                "He who turns the other cheek is a cowardly dog!",
+                                "Give blow for blow, scorn for scorn, doom for doom - with compound interest liberally added thereunto! Eye for eye, tooth for tooth, aye four-fold, a hundred-fold! Make yourself a Terror to your adversary, and when he goeth his way, he will possess much additional wisdom to ruminate over. Thus shall you make yourself respected in all the walks of life, and your spirit your immortal spirit - shall live, not in an intangible paradise, but in the brains and sinews of those whose respect you have gained."
+                            ]
+                        },
+                        {
+                            num: "IV",
+                            verses: [
+                                "Life is the great indulgence, death - the great abstinence. Therefore, make the most of life HERE AND NOW!",
+                                "There is no heaven of glory bright, and no hell where sinners roast. Here and now is our day of torment! Here and now is our day of joy! Here and now is our opportunity! Choose ye this day, this hour, for no redeemer liveth!",
+                                "Say unto thine own heart, \"I am mine own redeemer.\"",
+                                "Stop the way of them that would persecute you. Let those who devise thine undoing be hurled back to confusion and infamy. Let them be as chaff before the cyclone and after they have fallen rejoice in thine own salvation.",
+                                "Then all thy bones shall say pridefully, \"Who is like unto me? Have I not been too strong for mine adversaries? Have I not delivered MYSELF by mine own brain?\""
+                            ]
+                        },
+                        {
+                            num: "V",
+                            verses: [
+                                "Blessed are the strong, for they shall possess the earth - Cursed are the weak, for they shall inherit the yoke!",
+                                "Blessed are the powerful, for they shall be reverenced among men - Cursed are the feeble, for they shall be blotted out!",
+                                "Blessed are the bold, for they shall be masters of the world - Cursed are the righteously humble, for they shall be trodden under cloven hoofs!",
+                                "Blessed are the victorious, for victory is the basis of right - Cursed are the vanquished, for they shall be vassals forever!",
+                                "Blessed are the iron-handed, for the unfit shall flee before them - Cursed are the poor in spirit, for they shall be spat upon!",
+                                "Blessed are the death-defiant, for their days shall be long in the land - Cursed are the gazers toward a richer life beyond the grave, for they shall perish amidst plenty!",
+                                "Blessed are the destroyers of false hope, for they are the true Messiahs - Cursed are the god-adorers, for they shall be shorn sheep!",
+                                "Blessed are the valiant, for they shall obtain great treasure - Cursed are the believers in good and evil, for they are frightened by shadows!",
+                                "Blessed are those that believe in what is best for them, for never shall their minds be terrorized - Cursed are the \"lambs of God\", for they shall be bled whiter than snow!",
+                                "Blessed is the man who has a sprinkling of enemies, for they shall make him a hero - Cursed is he who doeth good unto others who sneer upon him in return, for he shall be despised!",
+                                "Blessed are the mighty-minded, for they shall ride the whirlwinds - Cursed are they who teach lies for truth and truth for lies, for they are an abomination!",
+                                "Thrice cursed are the weak whose insecurity makes them vile, for they shall serve and suffer!",
+                                "The angel of self-deceit is camped in the souls of the \"righteous\" - The eternal flame of power through joy dwelleth within the flesh of the Satanist!"
+                            ]
+                        }
+                    ]
+                },
+                bookLucifer: {
+                    title: "THE BOOK OF LUCIFER",
+                    subtitle: "THE ENLIGHTENMENT",
+                    intro: "The Roman god, Lucifer, was the bearer of light, the spirit of the air, the personification of enlightenment. In Christian mythology he became synonymous with evil, which was only to have been expected from a religion whose very existence is perpetuated by clouded definitions and bogus values! It is time to set the record straight.",
+                    chapters: [
+                        { 
+                            title: "I. WANTED! GOD - DEAD OR ALIVE", 
+                            text: `<p>It is a popular misconception that the Satanist does not believe in God. The concept of "God", as interpreted by man, has been so varied throughout the ages, that the Satanist simply accepts the definition which suits him best. Man has always created his gods, rather than his gods creating him. God is, to some, benign - to others, terrifying.</p>
+                            <p>To the Satanist "God" - by whatever name he is called, or by no name at all - is seen as the balancing factor in nature, and not as being concerned with suffering. This powerful force which permeates and balances the universe is far too impersonal to care about the happiness or misery of flesh-and-blood creatures on this ball of dirt upon which we live.</p>
+                            <p>Anyone who thinks of Satan as evil should consider all the men, women, children, and animals who have died because it was "God's will". Certainly a person grieving the untimely loss of a loved one would much rather have their loved one with them than in God's hands! Instead, they are unctuously consoled by their clergyman who says, "It was God's will, my dear"; or "He is in God's hands now, my son." Such phrases have been a convenient way for religionists to condone or excuse the mercilessness of God. But if God is in complete control and as benign as he is supposed to be, why does He allow these things to happen? Too long have religionists been falling back on their bibles and rulebooks to prove or disprove, justify, condemn, or interpret.</p>
+                            <p>The Satanist realizes that man, and the action and reaction of the universe, is responsible for everything, and doesn't mislead himself into thinking that someone cares. No longer will we sit back and accept "fate" without doing anything about it, just because it says so in Chapter such and such, Psalm so and so - and that's that!</p>
+                            <p>The Satanist knows that praying does absolutely no good - in fact, it actually lessens the chance of success, for the devoutly religious too often sit back complacently and pray for a situation which, if they were to do something about it on their own, could be accomplished much quicker! The Satanist shuns terms such as "hope" and "prayer" as they are indicative of apprehension. If we hope and pray for something to come about, we will not act in a positive way which will make it happen. The Satanist, realizing that anything he gets is of his own doing, takes command of the situation instead of praying to God for it to happen. Positive thinking and positive action add up to results.</p>
+                            <p>Just as the Satanist does not pray to God for assistance, he does not pray for forgiveness for his wrong doings. In other religions, when one commits a wrong he either prays to God for forgiveness, or confesses to an intermediary and asks him to pray to God for forgiveness for his sins. The Satanist knows that praying does no good, confessing to another human being, like himself, accomplishes even less - and is, furthermore, degrading.</p>
+                            <p>When a Satanist commits a wrong, he realizes that it is natural to make a mistake - and if he is truly sorry about what he has done, he will learn from it and take care not to do the same thing again. If he is not honestly sorry about what he has done, and knows he will do the same thing over and over, he has no business confessing and asking forgiveness in the first place.</p>` 
+                        },
+                        { 
+                            title: "II. THE GOD YOU SAVE MAY BE YOURSELF", 
+                            text: `<p>ALL religions of a spiritual nature are inventions of man. He has created an entire system of gods with nothing more than his carnal brain. Just because he has an ego, and cannot accept it, he has to externalize it into some great spiritual device which he calls "God".</p>
+                            <p>God can do all the things man is forbidden to do - such as kill people, perform miracles to gratify his will, control without any apparent responsibility, etc. If man needs such a god and recognizes that god, then he is worshipping an entity that a human being invented. Therefore, HE IS WORSHIPPING BY PROXY THE MAN THAT INVENTED GOD. Is it not more sensible to worship a god that he, himself, has created, in accordance with his own emotional needs - one that best represents the very carnal and physical being that has the idea-power to invent a god in the first place?</p>
+                            <p>If man insists on externalizing his true self in the form of "God", then why fear his true self, in fearing "God", - why praise his true self in praising "God", - why remain externalized from "God" IN ORDER TO ENGAGE IN RITUAL AND RELIGIOUS CEREMONY IN HIS NAME?</p>
+                            <p>Man needs ritual and dogma, but no law states that an externalized god is necessary in order to engage in ritual and ceremony performed in a god's name! Could it be that when he closes the gap between himself and his "God" he sees the demon of pride creeping forth - that very embodiment of Lucifer appearing in his midst? He no longer can view himself in two parts, the carnal and the spiritual, but sees them merge as one, and then to his abysmal horror, discovers that they are only the carnal AND ALWAYS WERE! Then he either hates himself to death, day by day - or rejoices that he is what he is! If he accepts himself, but recognizes that ritual and ceremony are the important devices that his invented religions have utilized to sustain his faith in a lie, then it is the SAME FORM OF RITUAL that will sustain his faith in the truth - the primitive pageantry that will give his awareness of his own majestic being added substance.</p>` 
+                        },
+                        { 
+                            title: "III. SOME EVIDENCE OF A NEW SATANIC AGE", 
+                            text: `<p>The Seven deadly sins of the Christian Church are: greed, pride, envy, anger, gluttony, lust, and sloth. Satanism advocates indulging in each of these "sins" as they all lead to physical, mental, or emotional gratification.</p>
+                            <p>A Satanist knows there is nothing wrong with being greedy, as it only means that he wants more than he already has. Envy means to look with favor upon the possessions of others, and to be desirous of obtaining similar things for oneself. Envy and greed are the motivating forces of ambition and without ambition, very little of any importance would be accomplished.</p>
+                            <p>Gluttony is simply eating more than you need to keep yourself alive. When you have overeaten to the point of obesity, another sin - pride - will motivate you to regain an appearance that will renew your self-respect. Anyone who buys an article of clothing for a purpose other than covering his body and protecting it from the elements is guilty of pride. Satanists often encounter scoffers who maintain that labels are not necessary. It must be pointed out to these destroyers of labels that one or many articles they themselves are wearing are not necessary to keep them warm. There is not a person on this earth who is completely devoid of ornamentation. Regardless of how verbose the cynic may be in his intellectual description of how free he is, he is still wearing the elements of pride.</p>
+                            <p>Being reluctant to get up in the morning is to be guilty of sloth, and if you lie in bed long enough you may find yourself committing yet another sin - lust. To have the faintest stirring of sexual desire is to be guilty of lust. In order to ensure the propagation of humanity, nature made lust the second most powerful instinct, the first being self-preservation. Realizing this, the Christian Church made fornication the "Original Sin". In this way they made sure no one would escape sin.</p>
+                            <p>The strongest instinct in every living thing is self-preservation, which brings us to the last of the seven deadly sins - anger. Is it not our instinct for self-preservation that is aroused when someone harms us, when we become angry enough to protect ourselves from further attack? A Satanist practices the motto, "If a man smite thee on one cheek, smash him on the other!" Let no wrong go unredressed. Be as a lion in the path - be dangerous even in defeat!</p>` 
+                        },
+                        { 
+                            title: "IV. HELL, THE DEVIL, AND HOW TO SELL YOUR SOUL", 
+                            text: `<p>Satan has certainly been the best friend the church has ever had, as he has kept it in business all these years. The false doctrine of Hell and the Devil has allowed the Protestant and Catholic Churches to flourish far too long. Without a devil to point their fingers at, religionists of the right hand path would have nothing with which to threaten their followers. "Satan leads you to temptation"; "Satan is the prince of evil"; "Satan is vicious, cruel, brutal," they warn. "If you give in to the temptations of the devil, you will surely suffer eternal damnation and roast in Hell."</p>
+                            <p>The semantic meaning of Satan is the "adversary" or "opposition" or the "accuser". The very word "devil" comes from the Indian devi which means "god". Satan represents opposition to all religions which serve to frustrate and condemn man for his natural instincts. He has been given an evil role simply because he represents the carnal, earthly, and mundane aspects of life.</p>
+                            <p>Satan, the chief devil of the Western World, was originally an angel whose duty was to report human delinquencies to God. It was not until the Fourteenth Century that he began to be depicted as an evil deity who was part man and part animal, with goat-like horns and hooves. Before Christianity gave him the names of Satan, Lucifer, etc., the carnal side of man's nature was governed by the god which was then called Dionysus, or Pan, depicted as a satyr or faun, by the Greeks. Pan was originally the "good guy", and symbolized fertility and fecundity.</p>
+                            <p>To the Satanist, it is unnecessary to sell your soul to the Devil or make a pact with Satan. This threat was devised by Christianity to terrorize people so they would not stray from the fold. With scolding fingers and trembling voices, they taught their followers that if they gave in to the temptations of Satan, and lived their lives according to their natural predilections, they would have to pay for their sinful pleasures by giving their souls to Satan and suffering in Hell for all eternity. People were led to believe that a pure soul was a passport to everlasting life.</p>
+                            <p>The Teutonic Goddess of the Dead and daughter of Loki was named Hel, a Pagan god of torture and punishment. Another "L" was added when the books of the Old Testament were formulated. The prophets who wrote the Bible did not know the word "Hell"; they used the Hebrew Sheol and the Greek Hades, which meant the grave; also the Greek Tartaros, which was the abode of fallen angels, the underworld (inside the earth), and Gehenna, which was a valley near Jerusalem where Moloch reigned and garbage was dumped and burned. It is from this that the Christian Church has evolved the idea of "fire and brimstone" in Hell.</p>` 
+                        },
+                        { 
+                            title: "V. LOVE AND HATE", 
+                            text: `<p>Satanism represents kindness to those who deserve it instead of love wasted on ingrates!</p>
+                            <p>You cannot love everyone; it is ridiculous to think you can. If you love everyone and everything you lose your natural powers of selection and wind up being a pretty poor judge of character and quality. If anything is used too freely it loses its true meaning. Therefore, the Satanist believes you should love strongly and completely those who deserve your love, but never turn the other cheek to your enemy!</p>
+                            <p>Love is one of the most intense emotions felt by man; another is hate. Forcing yourself to feel indiscriminate love is very unnatural. If you try to love everyone you only lessen your feelings for those who deserve your love. Repressed hatred can lead to many physical and emotional ailments. By learning to release your hatred towards those who deserve it, you cleanse yourself of these malignant emotions and need not take your pent-up hatred out on your loved ones.</p>
+                            <p>There has never been a great "love" movement in the history of the world that hasn't wound up killing countless numbers of people, we must assume, to prove how much they loved them! Every hypocrite who ever walked the earth has had pockets bulging with love!</p>
+                            <p>Every pharisaical religionist claims to love his enemies, even though when wronged he consoles himself by thinking "God will punish them". Instead of admitting to themselves that they are capable of hating their foes and treating them in the manner they deserve, they say: "There, but for the grace of God, go I," and "pray" for them. Why should we humiliate and lower ourselves by drawing such inaccurate comparisons?</p>
+                            <p>Satanism has been thought of as being synonymous with cruelty and brutality. This is so only because people are afraid to face the truth - and the truth is that human beings are not all benign or all loving. Just because the Satanist admits he is capable of both love and hate, he is considered hateful. On the contrary, because he is able to give vent to his hatred through ritualized expression, he is far more capable of love - the deepest kind of love. By honestly recognizing and admitting to both the hate and the love he feels, there is no confusing one emotion with the other. Without being able to experience one of these emotions, you cannot fully experience the other.</p>` 
+                        },
+                        { 
+                            title: "VI. SATANIC SEX", 
+                            text: `<p>Much controversy has arisen over the Satanic views on "free love". It is often assumed that sexual activity is the most important factor of the Satanic religion, and that willingness to participate in sex-orgies is a prerequisite for becoming a Satanist. Nothing could be farther from the truth! In fact, opportunists who have no deeper interest in Satanism than merely the sexual aspects are emphatically discouraged.</p>
+                            <p>Satanic philosophy does advocate sexual freedom, but only in the true sense of the word. Free love, in the Satanic concept, means exactly that - freedom to either be faithful to one person or to indulge your sexual desires with as many others as you feel is necessary to satisfy your particular needs.</p>
+                            <p>Satanism does not encourage orgiastic activity or extramarital affairs for those to whom they do not come naturally. For many, it would be very unnatural and detrimental to be unfaithful to their chosen mates. To others, it would be frustrating to be bound sexually to just one person. Each person must decide for himself what form of sexual activity best suits his individual needs. Self-deceitfully forcing yourself to be adulterous or to have sex partners when not married just for the sake of proving others (or worse yet, to yourself) that you are emancipated from sexual guilt is just as wrong, by Satanic standards, as leaving any sexual need unfulfilled because of ingrained feelings of guilt.</p>
+                            <p>Satanism condones any type of sexual activity which properly satisfies your individual desires - be it heterosexual, homosexual, bisexual, or even asexual, if you choose. Satanism also sanctions any fetish or deviation which will enhance your sex-life, so long as it involves no one who does not wish to be involved.</p>
+                            <p>The prevalence of deviant and/or fetishistic behavior in our society would stagger the imagination of the sexually naïve. Everyone has some form of fetish, but because they are unaware of the preponderance of fetishistic activity in our society, they feel they are depraved if they submit to their "unnatural" yearnings.</p>
+                            <p>Satanism encourages any form of sexual expression you may desire, so long as it hurts no one else. This statement must be qualified, to avoid misinterpretation. By not hurting another, this does not include the unintentional hurt felt by those who might not agree with your views on sex, because of their anxieties regarding sexual morality. Naturally, you should avoid offending others who mean a great deal to you, such as prudish friends and relatives.</p>
+                            <p>Satanism does not advocate rape, child molesting, sexual defilement of animals, or any other form of sexual activity which entails the participation of those who are unwilling or whose innocence or naïveté would allow them to be intimidated or misguided into doing something against their wishes.</p>` 
+                        },
+                        { 
+                            title: "VII. NOT ALL VAMPIRES SUCK BLOOD!", 
+                            text: `<p>Satanism represents responsibility to the responsible, instead of concern for psychic vampires.</p>
+                            <p>Many people who walk the earth practice the fine art of making others feel responsible and even indebted to them, without cause. Satanism observes these leeches in their true light. Psychic vampires are individuals who drain others of their vital energy. This type of person can be found in all avenues of society. They fill no useful purpose in our lives, and are neither love objects nor true friends. Yet we feel responsible to the psychic vampire without knowing why.</p>
+                            <p>If you think you may be the victim of such a person, there are a few simple rules which will help you form a decision. Is there a person you often call or visit, even though you really don't want to, because you know you will feel guilty if you don't? Or, do you find yourself constantly doing favors for one who doesn't come forward and ask, but hints? Often the psychic vampire will use reverse psychology, saying: "Oh, I couldn't ask you to do that" - and you, in turn, insist upon doing it. The psychic vampire never demands anything of you. That would be far too presumptuous. They simply let their wishes be known in subtle ways which will prevent them from being considered pests.</p>
+                            <p>A large percentage of these people have special "attributes" which make their dependence upon you more feasible and much more effective. Many psychic vampires are invalids (or pretend to be) or are "mentally or emotionally disturbed." Others might feign ignorance or incompetence so you will, out of pity - or more often, exasperation - do things for them. Recognition of these modern-day demons and their methods is the only antidote for their devastating hold over you.</p>
+                            <p>The only way to deal with a psychic vampire is to "play dumb" and act as though they are genuinely altruistic and really expect nothing in return. Teach them a lesson by graciously taking what they give you, thanking them loudly enough for all to hear, and walking away! When they feel you falling from their clutches, they will show their true colors and will become angry and vindictive. Once you have moved them to this point, you can play the role of the injured party.</p>` 
+                        },
+                        { 
+                            title: "VIII. INDULGENCE... NOT COMPULSION", 
+                            text: `<p>Satanism encourages its followers to indulge in their natural desires. Only by doing so can you be a completely satisfied person with no frustrations which can be harmful to yourself and others around you. Therefore, the most simplified description of the Satanic belief is: INDULGENCE INSTEAD OF ABSTINENCE.</p>
+                            <p>People often mistake compulsion for indulgence, but there is a world of difference between the two. A compulsion is never created by indulging, but by not being able to indulge. By making something taboo, it only serves to intensify the desire. Everyone likes to do the things they have been told not to. "Forbidden fruits are sweetest."</p>
+                            <p>Webster's Encyclopedic Dictionary defines indulgence thusly: "To give oneself up to; not to restrain or oppose; to give free course to; to gratify by compliance; to yield to." The dictionary definition of compulsion is: "The act of compelling or driving by a force, physical or moral; constraint of the will; (compulsory, obligatory)." In other words, indulgence implies choice, whereas compulsion indicates the lack of choice.</p>
+                            <p>When a person has no proper release for his desires they rapidly build up and become compulsions. If everyone had a particular time and place for the purpose of periodically indulging in their personal desires, without fear of embarrassment or reproach, they would be sufficiently released to lead unfrustrated lives in the everyday world. They would be free to plunge headlong into whatever undertaking they might choose instead of going about their duties half-heartedly.</p>
+                            <p>The true Satanist is not mastered by sex any more than he is mastered by any of his other desires. As with all other pleasurable things, the Satanist is master of, rather than mastered by sex.</p>` 
+                        },
+                        { 
+                            title: "IX. ON THE CHOICE OF A HUMAN SACRIFICE", 
+                            text: `<p>The supposed purpose in performing the ritual of sacrifice is to throw the energy provided by the blood of the freshly slaughtered victim into the atmosphere of the magical working, thereby intensifying the magician's chances of success.</p>
+                            <p>The "white" magician, wary of the consequences involved in the killing of a human being, naturally utilizes birds, or other "lower" creatures in his ceremonies. It seems these sanctimonious wretches feel no guilt in the taking of a non-human life, as opposed to a human's. The fact of the matter is that if the "magician" is worthy of his name, he will be uninhibited enough to release the necessary force from his own body, instead of from an unwilling and undeserving victim!</p>
+                            <p>Contrary to all established magical theory, the release of this force is NOT effected in the actual spilling of blood, but in the death throes of the living creature! This discharge of bioelectrical energy is the very same phenomenon which occurs during any profound heightening of the emotions, such as: sexual orgasm, blind anger, mortal terror, consuming grief, etc.</p>
+                            <p>Under NO circumstances would a Satanist sacrifice any animal or baby! For centuries, propagandists of the right-hand path have been prattling over the supposed sacrifices of small children and voluptuous maidens at the hands of diabolists. It would be thought that anyone reading or hearing of these heinous accounts would immediately question their authenticity, taking into consideration the biased sources of the stories.</p>
+                            <p>Man, the animal, is the godhead to the Satanist. The purest form of carnal existence reposes in the bodies of animals and human children who have not grown old enough to deny themselves their natural desires. They can perceive things that the average adult human can never hope to. Therefore, the Satanist holds these beings in a sacred regard, knowing he can learn much from these natural magicians of the world.</p>
+                            <p>The only time a Satanist would perform a human sacrifice would be if it were to serve a two-fold purpose; that being to release the magician's wrath in the throwing of a curse, and more important, to dispose of a totally obnoxious and deserving individual who has unjustly wronged you.</p>` 
+                        },
+                        { 
+                            title: "X. LIFE AFTER DEATH THROUGH FULFILLMENT OF THE EGO", 
+                            text: `<p>Man is aware that he will die, someday. Other animals, when nearing death, know they are about to die; but it is not until death is certain that the animal senses his coming departure from this world. And even then he does not know exactly what is entailed in dying. It is often pointed out that animals accept death gracefully, without fear or resistance. This is a beautiful concept, but one that only holds true in cases where death for the animal is unavoidable. When an animal is sick or injured he will fight for his life with every ounce of strength he has left. It is this unshakable will to live that, if man were not so "highly evolved", would also give him the fighting spirit he needs to stay alive.</p>
+                            <p>Life is the one great indulgence; death the one great abstinence. To a person who is satisfied with his earthly existence, life is like a party; and no one likes to leave a good party. By the same token, if a person is enjoying himself here on earth he will not so readily give up this life for the promise of an afterlife about which he knows nothing.</p>
+                            <p>The Eastern mystical beliefs teach humans to discipline themselves against any conscious will for success so they might dissolve themselves into "Universal Cosmic Awareness" - anything to avoid good healthy self-satisfaction or honest pride in earthly accomplishments!</p>
+                            <p>The Eastern philosophies preach the dissolution of man's ego before he can produce sins. It is unfathomable to the Satanist to conceive of an ego which would willfully choose denial of itself. Religionists have kept their followers in line by suppressing their egos. By making their followers feel inferior, the awesomeness of their god is insured. Satanism encourages its members to develop a good strong ego because it gives them the self-respect necessary for a vital existence in this life.</p>
+                            <p>If a person has been vital throughout his life and has fought to the end for his earthly existence, it is this ego which will refuse to die, even after the expiration of the flesh which housed it.</p>` 
+                        },
+                        { 
+                            title: "XI. RELIGIOUS HOLIDAYS", 
+                            text: `<p>The highest of all holidays in the Satanic religion is the date of one's own birth. This is in direct contradiction to the holy of holy days of other religions, which deify a particular god who has been created in an anthropomorphic form of their own image, thereby showing that the ego is not really buried.</p>
+                            <p>The Satanist feels: "Why not really be honest and if you are going to create a god in your image, why not create that god as yourself." Every man is a god if he chooses to recognize himself as one. So, the Satanist celebrates his own birthday as the most important holiday of the year. After all, aren't you happier about the fact that you were born than you are about the birth of someone you have never even met?</p>
+                            <p>After one's own birthday, the two major Satanic holidays are Walpurgisnacht and Halloween (or All Hallows' Eve).</p>
+                            <p>St. Walpurgis - or Walpurga, or Walburga - was born in Sussex about the end of the Seventh Century. Her day taking the place of an earlier Pagan festival. Amazingly enough, all of this rigmarole was found necessary simply to condone the continuance of the most important Pagan festival of the year - the grand climax of the spring equinox! The Eve of May has been memorialized as the night that all of the demons, specters, afreets, and banshees would come forth and hold their wild revels, symbolizing the fruition of the spring equinox.</p>
+                            <p>Halloween - All Hallows' Eve, or All Saints' Day - falls on October 31st or November 1st. Originally, All Hallows' Eve was one of the great fire festivals of Britain at the time of the Druids. In Scotland it was associated with the time when the spirits of the dead, the demons, witches, and sorcerers were unusually active and propitious.</p>
+                            <p>The solstices and equinoxes are also celebrated as holidays, as they herald the first day of the seasons. The summer solstice is in June, and the winter solstice is in December. The autumn equinox is in September, and the spring equinox is in March.</p>` 
+                        },
+                        { 
+                            title: "XII. THE BLACK MASS", 
+                            text: `<p>No other single device has been associated with Satanism as much as the black mass. To say that the most blasphemous of all religious ceremonies is nothing more than a literary invention is certainly a statement which needs qualifying - but nothing could be truer.</p>
+                            <p>The popular concept of the black mass is thus: a defrocked priest stands before an altar consisting of a nude woman, her legs spread-eagled, and hosts are blessed as the priest slips them in and out of her labia. Then, we are told, an invocation to Satan and various demons is followed by an array of prayers and psalms chanted backwards or interspersed with obscenities. The stories of unbaptized babies being stolen by Satanists for use in the mass were not only effective propaganda measures, but also provided a constant source of revenue for the Church, in the form of baptism fees.</p>
+                            <p>The usual assumption is that the Satanic ceremony or service is always called a black mass. A black mass is not the magical ceremony practiced by Satanists. The Satanist would only employ the use of a black mass as a form of psychodrama. Furthermore, a black mass does not necessarily imply that the performers of such are Satanists. A black mass is essentially a parody of the religious service of the Roman Catholic Church, but can be loosely applied to a satire on any religious ceremony.</p>
+                            <p>Any ceremony considered a black mass must effectively shock and outrage, as this seems to be the measure of its success. Today, a black mass would consist of the blaspheming of such "sacred" topics as Eastern mysticism, psychiatry, the psychedelic movement, ultra-liberalism, etc. The Satanic magus has always been the catalyst for the dichotomy necessary in molding popular beliefs, and in this case a ceremony in the nature of a black mass may serve a far-reaching magical purpose.</p>` 
+                        }
+                    ]
+                }
+            },
+            fr: {
+                title: "La Bible Satanique - Portail",
+                headerLogoText: "La Bible Satanique - Section I",
+                overlayTitle: "Chambre de Décompression Intellectuelle",
+                overlayDesc: "Faites retentir le gong sacré 9 fois pour purifier l'atmosphère mentale et briser les attaches dogmatiques profanes avant d'entrer.",
+                altarLabel: "L'Autel du Sentier de la Main Gauche",
+                detailsLabel: "Élucidation Rationnelle",
+                cardReadMore: "[ DÉCODER LA VALEUR ]",
+                prologueHeader: "PROLOGUE",
+                statementsHeader: "LES NEUF DÉCLARATIONS SATANIQUES",
+                statementsSubtitle: "Le codex fondateur de la souveraineté individuelle",
+                footerCopyright: "© 1969 - 2026 LA BIBLE SATANIQUE - ADAPTATION MODERNE",
+                footerConcept: "REJET DU THÉISME — GLORIFICATION DE LA RAISON & DE L'INDIVIDUALISME",
+                altar: {
+                    prologue: "PROLOGUE & CODES",
+                    satan: "LE LIVRE DE SATAN",
+                    satanSub: "[FEU]",
+                    lucifer: "LE LIVRE DE LUCIFER",
+                    luciferSub: "[AIR]",
+                    belial: "LE LIVRE DE BELIAL",
+                    belialSub: "[TERRE]",
+                    leviathan: "LE LIVRE DE LEVIATHAN",
+                    leviathanSub: "[EAU]",
+                    teaser: "WIP"
+                },
+                prologue: `<p>Les dieux du chemin de la main droite se sont chamaillés et querellés pendant tout un âge terrestre. Chacune de ces divinités, ainsi que leurs prêtres et ministres respectifs, ont tenté de trouver la sagesse dans leurs propres mensonges. L'âge de glace de la pensée religieuse ne peut durer qu'un temps limité dans ce grand dessein de l'existence humaine. Les dieux de la sagesse souillée ont eu leur saga, et leur millénaire est devenu réalité.</p>
+                <p>Chacun, avec son propre chemin "divin" vers le paradis, a accusé l'autre d'hérésies et d'indiscrétions spirituelles. L'Anneau du Nibelung porte une malédiction éternelle, mais seulement parce que ceux qui le cherchent pensent en termes de "Bien" et de "Mal" - eux-mêmes étant en tout temps le "Bien". Les dieux du passé sont devenus leurs propres diables pour survivre. Faiblement, leurs ministres jouent le jeu du diable pour remplir leurs tabernacles et payer les hypothèques de leurs temples. Hélas, trop longtemps ils ont étudié la "vertu", et ils font de piètres et incompétents diables.</p>
+                <p>Alors ils se donnent tous la main dans une unité "fraternelle", et dans leur désespoir se rendent au Valhalla pour leur dernier grand concile œcuménique. "Le crépuscule des dieux approche dans la pénombre." Les corbeaux de la nuit se sont envolés pour convoquer Loki, qui a enflammé le Valhalla avec le trident brûlant de l'Enfer.</p>
+                <p>Le crépuscule est terminé. Une lueur de lumière nouvelle est née de la nuit et Lucifer est ressuscité, une fois de plus pour proclamer : "C'est l'âge de Satan ! Satan règne sur la Terre !" Les dieux des injustes sont morts. C'est le matin de la magie, et d'une sagesse pure. La CHAIR prévaut et une grande Église sera bâtie, consacrée en son nom. Le salut de l'homme ne dépendra plus de son abnégation. Et l'on saura que le monde de la chair et des vivants sera la plus grande préparation à tous les délices éternels !</p>`,
+                statements: [
+                    { num: 1, text: "Satan représente l'indulgence, plutôt que l'abstinence !", explication: "La vie est faite pour être vécue avec une gratification terrestre, physique et émotionnelle. Nier ses instincts naturels cause des dommages psychologiques et une fausse piété." },
+                    { num: 2, text: "Satan represents l'existence vitale, plutôt que les illusions spirituelles !", explication: "La réalité tangible d'ici-bas est notre seule certitude. Les fantasmes spirituels d'évasion gaspillent la précieuse et unique existence qui nous est garantie." },
+                    { num: 3, text: "Satan représente la sagesse pure, plutôt que l'auto-tromperie hypocrite !", explication: "L'honnêteté envers soi-même est le mérite ultime. Accepter la nature humaine telle qu'elle est vaut mieux que de bâtir des réalités fragiles sur des dogmes antiques." },
+                    { num: 4, text: "Satan représente la bonté pour ceux qui la méritent, plutôt que de l'amour gaspillé pour les ingrats !", explication: "L'amour aveugle et indiscriminé dilue sa propre valeur. L'affection sincère et le respect doivent être réservés à ceux qui les gagnent, non gaspillés pour des parasites." },
+                    { num: 5, text: "Satan représente la vengeance, plutôt que de tendre l'autre joue !", explication: "Tendre l'autre joue encourage les prédateurs. Répondre à la force par une force égale garantit la sécurité personnelle, le respect de soi, et établit des limites claires." },
+                    { num: 6, text: "Satan représente la responsabilité pour ceux qui sont responsables, plutôt que de se soucier des vampires psychiques !", explication: "Ne vous sentez pas redevable envers les parasites émotionnels. Protégez votre énergie et ne vous souciez que de ceux qui contribuent activement à votre vie." },
+                    { num: 7, text: "Satan représente l'homme comme un simple animal, parfois meilleur, plus souvent pire que ceux qui marchent à quatre pattes, qui, grâce à son 'développement intellectuel et spirituel divin', est devenu le plus vicieux de tous les animaux !", explication: "L'homme n'est pas séparé de la nature. S'élever par orgueil spirituel nous aveugle face à nos instincts bestiaux, menant à une cruauté incontrôlée." },
+                    { num: 8, text: "Satan représente tous les prétendus péchés, car ils mènent tous à une gratification physique, mentale ou émotionnelle !", explication: "Ce que les églises traditionnelles étiquettent comme 'péchés' sont de simples moteurs physiques et émotionnels de base. Les embrasser sans culpabilité évite les névroses." },
+                    { num: 9, text: "Satan a été le meilleur ami que l'Église ait jamais eu, car il l'a maintenue en affaires pendant toutes ces années !", explication: "Sans une figure de méchant construite pour porter le blâme de la nature humaine, les systèmes de contrôle restrictifs des institutions s'effondreraient instantanément." }
+                ],
+                bookSatan: {
+                    title: "LE LIVRE DE SATAN",
+                    subtitle: "LE DIATRIBE INFERNAL",
+                    intro: "Le premier livre de la Bible Satanique n'est pas une tentative de blasphème autant qu'une déclaration de ce que l'on pourrait nommer une 'indignation diabolique'. Lisez et apprenez la Loi de la Jungle.",
+                    chapters: [
+                        {
+                            num: "I",
+                            verses: [
+                                "Dans cette terre aride d'acier et de pierre, j'élève ma voix pour que vous l'entendiez. Vers l'Est et vers l'Ouest, je fais signe. Vers le Nord et vers le Sud, je montre un symbole proclamant : Mort au faible, richesse au fort !",
+                                "Ouvrez les yeux pour voir, ô hommes à l'esprit moisi, et écoutez-moi, ô millions d'âmes égarées !",
+                                "Car je me dresse pour défier la sagesse du monde, pour interroger les « lois » de l'homme et de « Dieu » !",
+                                "Je demande des comptes à votre règle d'or et j'interroge le pourquoi et le comment de vos dix commandements.",
+                                "Devant aucune de vos idoles de papier je ne m'incline par acquiescement, et celui qui me dit « tu dois » est mon ennemi mortel !",
+                                "Je trempe mon index dans le sang aqueux de votre rédempteur impuissant et fou, et j'écris sur son front déchiré d'épines : Le VÉRITABLE prince du mal - le roi des esclaves !",
+                                "Aucun mensonge vénérable ne sera une vérité pour moi ; aucun dogme étouffant n'entravera ma plume !",
+                                "Je romps avec toutes les conventions qui ne mènent pas à mon succès terrestre et à mon bonheur.",
+                                "J'élève en une invasion farouche l'étendard des puissants !",
+                                "Je plonge mon regard dans l'œil vitreux de votre redoutable Jéhovah, et je le saisis par la barbe ; je lève une hache de guerre, et je lui fends son crâne vermoulu !",
+                                "Je pulvérise le contenu morbide de vos sépulcres blanchis par la philosophie, et je ris d'une colères sardonique !"
+                            ]
+                        },
+                        {
+                            num: "II",
+                            verses: [
+                                "Regardez le crucifix ; que symbolise-t-il ? Une incompétence blafarde suspendue à un arbre.",
+                                "Je questionne toutes choses. Alors que je me tiens devant les façades putrides et vernies de vos dogmes moraux les plus hautains, j'y inscris en lettres de mépris brûlant : Regardez et comprenez, tout ceci n'est que fraude !",
+                                "Rassemblez-vous autour de moi, ô vous qui défiez la mort, et la terre entière sera vôtre, à posséder et à préserver !",
+                                "Trop longtemps, la main des morts a été autorisée à stériliser la pensée des vivants !",
+                                "Trop longtemps, le juste et l'injuste, le bien et le mal ont été inversés par de faux prophètes !",
+                                "Aucun credo ne doit être accepté sous l'autorité d'une nature « divine ». Les religions doivent être passées au crible de la question. Aucun dogme moral ne doit être tenu pour acquis - aucun étalon de mesure déifié. Il n'y a rien d'intrinsèquement sacré dans les codes moraux. Comme les idoles de bois d'autrefois, ils sont l'œuvre de mains humaines, et ce que l'homme a fait, l'homme peut le détruire !",
+                                "Celui qui est lent à croire n'importe quoi possède un grand discernement, car la foi en un seul principe faux est le commencement de toute folie.",
+                                "Le devoir principal de chaque ère nouvelle est d'élever des hommes nouveaux pour déterminer ses libertés, la mener vers le succès matériel - pour briser les cadenas rouillés et les chaînes des coutumes mortes qui empêchent toujours une saine expansion. Les théories et les idées qui ont pu signifier la vie, l'espoir et la liberté pour nos ancêtres peuvent aujourd'hui signifier pour nous la ruine, l'esclavage et le déshonneur !",
+                                "À mesure que les environnements changent, aucun idéal humain ne demeure certain !",
+                                "Toutes les fois, par conséquent, qu'un mensonge s'est bâti un trône, qu'il soit assailli sans pitié et sans regret, car sous la domination d'une fausseté nuisible, nul ne peut prospérer.",
+                                "Que les sophismes établis soient détrônés, déracinés, brûlés et anéantis, car ils sont une menace permanente pour toute noblesse de pensée et d'action !",
+                                "Toute prétendue « vérité » dont les résultats prouvent qu'elle n'est qu'une vaine fiction, qu'elle soit jetée sans cérémonie dans les ténèbres extérieures, parmi les dieux morts, les empires déchus, les philosophies périmées et autres débris inutiles !",
+                                "Le plus dangereux de tous les mensonges couronnés est le mensonge sacré, sanctifié et privilégié - le mensonge que tout le monde croit être un modèle de vérité. C'est la mère fertile de toutes les autres erreurs et illusions populaires. C'est un arbre de déraison à tête d'hydre avec mille racines. C'est un cancer social !",
+                                "Le mensonge connu pour être un mensonge est à moitié éradiqué, mais le mensonge que même les personnes intelligentes acceptent comme un fait - le mensonge inculqué à un petit enfant sur les genoux de sa mère - est plus dangereux à combattre qu'une peste rampante !",
+                                "Les mensonges populaires ont toujours été les ennemis les plus redoutables de la liberté personnelle. Il n'y a qu'un seul moyen de les traiter : extirpez-les, jusqu'au cœur, tout comme les cancers. Exterminez-les racines et branches. Annihilez-les, ou ils nous annihileront !"
+                            ]
+                        },
+                        {
+                            num: "III",
+                            verses: [
+                                "« Aimez-vous les uns les autres », a-t-on dit, est la loi suprême, mais quelle puissance l'a décrétée ainsi ? Sur quelle autorité rationnelle repose l'évangile de l'amour ? Pourquoi ne devrais-je pas haïr mes ennemis - si je les « aime », cela ne me livre-t-il pas à leur merci ?",
+                                "Est-il naturel pour des ennemis de se faire du bien mutuellement - et QU'EST-CE QUE LE BIEN ?",
+                                "La victime déchirée et ensanglantée peut-elle « aimer » les mâchoires couvertes de sang qui la dépècent membre par membre ?",
+                                "Ne sommes-nous pas tous des animaux prédateurs par instinct ? Si les humains cessaient entièrement de se traquer mutuellement comme des proies, pourraient-ils continuer à exister ?",
+                                "Le terme de « luxure et de désir charnel » n'est-il pas plus fidèle pour décrire l'« amour » lorsqu'il s'applique à la perpétuation de la race ? L'« amour » des Écritures flatteuses n'est-il pas simplement un euphémisme pour l'activité sexuelle, ou le « grand enseignant » était-il un glorificateur d'eunuques ?",
+                                "Aimez vos ennemis et faites du bien à ceux qui vous haïssent et vous exploitent - n'est-ce pas là la philosophie méprisable de l'épagneul qui se roule sur le dos lorsqu'on lui donne un coup de pied ?",
+                                "Haïssez vos ennemis de tout votre cœur, et si un homme vous frappe sur une joue, ÉCRASEZ-le sur l'autre ! ; frappez-le à la hanche et à la cuisse, car la préservation de soi est la loi suprême !",
+                                "Celui qui est tend l'autre joue est un chien lâche !",
+                                "Rendez coup pour coup, mépris pour mépris, châtiment pour châtiment - avec des intérêts composés généreusement ajoutés ! Œil pour œil, dent pour dent, oui au quadruple, au centuple ! Devenez une Terreur pour votre adversaire, et lorsqu'il s'en ira, il aura bien des sagesses supplémentaires à méditer. Ainsi, vous vous ferez respecter dans tous les chemins de la vie, et votre esprit - votre esprit immortel - vivra, non pas dans un paradis intangible, mais dans le cerveau et les muscles de ceux dont vous avez gagné le respect."
+                            ]
+                        },
+                        {
+                            num: "IV",
+                            verses: [
+                                "La vie est la grande indulgence - la mort, la grande abstinence. Par conséquent, tirez le meilleur parti de la vie ICI ET MAINTENANT !",
+                                "Il n'y a pas de ciel de gloire lumineuse, ni d'enfer où grillent les pécheurs. Ici et maintenant est notre jour de tourment ! Ici et maintenant est notre jour de joie ! Ici et maintenant est notre opportunité ! Choisissez ce jour, cette heure, car aucun rédempteur ne vit !",
+                                "Dites à votre propre cœur : « Je suis mon propre rédempteur. »",
+                                "Barrez la route à ceux qui veulent vous persécuter. Que ceux qui trament votre perte soient rejetés dans la confusion et l'infamie. Qu'ils soient comme la paille devant le cyclone et, après leur chute, réjouissez-vous de votre propre salut.",
+                                "Alors tous vos os diront fièrement : « Qui est semblable à moi ? N'ai-je pas été trop fort pour mes adversaires ? Ne me suis-je pas délivré par mon propre esprit ? »"
+                            ]
+                        },
+                        {
+                            num: "V",
+                            verses: [
+                                "Bénis soient les forts, car they posséderont la terre - Maudits soient les faibles, car they hériteront du joug !",
+                                "Bénis soient les puissants, car they seront révérés parmi les hommes - Maudits soient les faibles, car they seront effacés !",
+                                "Bénis soient les audacieux, car they seront les maîtres du monde - Maudits soient les humblement vertueux, car they seront foulés sous les sabots fendus !",
+                                "Bénis soient les victorieux, car la victoire is la base du droit - Maudits soient les vaincus, car they seront vassaux à jamais !",
+                                "Bénis soient ceux qui ont une poigne de fer, car les inaptes fuiront devant eux - Maudits soient les pauvres en esprit, car they seront crachés dessus !",
+                                "Bénis soient ceux qui défient la mort, car leurs jours seront longs sur la terre - Maudits soient ceux qui regardent vers une vie plus riche au-delà de la tombe, car they périront au milieu de l'abondance !",
+                                "Bénis soient les destructeurs de faux espoirs, car they sont les véritables Messies - Maudits soient les adorateurs de dieu, car they seront des moutons tondus !",
+                                "Bénis soient les vaillants, car they obtiendront de grands trésors - Maudits soient les croyants au bien et au mal, car they sont éteints par des ombres !",
+                                "Bénis soient ceux qui croient en ce qui est le mieux pour eux, car jamais leurs esprits ne seront terrorisés - Maudits soient les « agneaux de Dieu », car they seront saignés plus blancs que la neige !",
+                                "Béni soit l'homme qui a un cortège d'ennemis, car they feront de lui un héros - Maudit soit celui qui fait du bien à ceux qui se moquent de lui en retour, car il sera méprisé !",
+                                "Bénis soient ceux qui ont l'esprit puissant, car they chevaucheront les tempêtes - Maudits soient ceux qui enseignent des mensonges pour des vérités et des vérités pour des mensonges, car they sont une abomination !",
+                                "Trois fois maudits soient les faibles que leur insécurité rend vils, car they serviront et souffriront !",
+                                "L'ange de l'auto-tromperie est campé dans l'âme des « vertueux » - La flamme éternelle de la puissance par la joie réside dans la chair du Sataniste !"
+                            ]
+                        }
+                    ]
+                },
+                bookLucifer: {
+                    title: "LE LIVRE DE LUCIFER",
+                    subtitle: "L'ILLUMINATION",
+                    intro: "Le dieu romain, Lucifer, était le porteur de lumière, l'esprit de l'air, la personnification de l'illumination. Dans la mythologie chrétienne, il est devenu synonyme de mal, ce qui n'était qu'attendu de la part d'une religion dont l'existence même est perpétuée par des définitions troubles et des valeurs de pacotille ! Il est temps de remettre les pendules à l'heure.",
+                    chapters: [
+                        { 
+                            title: "I. RECHERCHÉ ! DIEU - MORT OU VIF", 
+                            text: `<p>C'est une idée reçue courante que le sataniste ne croit pas en Dieu. Le concept de « Dieu », tel qu'interprété par l'homme, a été si varié à travers les âges, que le sataniste accepte simplement la définition qui lui convient le mieux. L'homme a toujours créé ses dieux, plutôt que ses dieux ne l'ont créé. Pour certains, Dieu est bienveillant ; pour d'autres, il est terrifiant.</p>
+                            <p>Pour le sataniste, « Dieu » — quel que soit le nom qu'on lui donne, ou même s'il n'en a aucun — est perçu comme le facteur d'équilibre de la nature, et non comme une entité concernée par la souffrance. Cette force puissante qui imprègne et équilibre l'univers est bien trop impersonnelle pour se soucier du bonheur ou de la misère des créatures de chair et de sang sur cette boule de boue sur laquelle nous vivons.</p>
+                            <p>Quiconque pense que Satan est le mal devrait considérer tous les hommes, femmes, enfants et animaux qui sont morts parce que c'était « la volonté de Dieu ». Assurément, une personne pleurant la perte prématurée d'un être cher préférerait de loin avoir cet être cher à ses côtés plutôt qu'entre les mains de Dieu ! Au lieu de cela, ils sont hypocritement consolés par leur ecclésiastique qui dit : « C'était la volonté de Dieu, ma chère » ou « Il est entre les mains de Dieu maintenant, mon fils. » De telles phrases ont été un moyen pratique pour les religieux de cautionner ou d'excuser la cruauté de Dieu. Mais si Dieu est en contrôle complet et aussi bienveillant qu'on le prétend, pourquoi permet-il que de telles choses se produisent ? Trop longtemps, les croyants se sont rabattus sur leurs bibles et leurs manuels pour prouver ou réfuter, justifier, condamner ou interpréter.</p>
+                            <p>Le sataniste réalise que l'homme, ainsi que l'action et la réaction de l'univers, est responsable de tout, et ne s'égare pas en pensant que quelqu'un se soucie de lui. Nous ne resterons plus assis à accepter passivement le « destin » sans rien faire, juste parce que c'est écrit dans tel chapitre ou tel psaume !</p>
+                            <p>Le sataniste sait que la prière ne sert absolument à rien ; en fait, elle diminue même les chances de succès, car les croyants attendent trop souvent passivement ce qu'ils pourraient accomplir bien plus vite par eux-mêmes ! Le sataniste évite les termes de "souhait" et de "prière" car ils indiquent de l'appréhension. Si l'on souhaite ou prie pour que quelque chose se réalise, on n'agira pas de manière positive pour que cela se produise. Le sataniste prend le contrôle de la situation au lieu de prier Dieu. Une pensée positive et une action positive produisent des résultats réels.</p>
+                            <p>Tout comme il ne prie pas Dieu pour obtenir de l'aide, il ne prie pas pour obtenir le pardon de ses méfaits. Dans les autres religions, lorsque l'on commet une faute, soit on prie Dieu pour être pardonné, soit on se confesse à un intermédiaire et on lui demande de prier pour nous. Le sataniste sait que la prière ne sert à rien et que se confesser à un autre être humain est dégradant.</p>
+                            <p>Lorsqu'un sataniste commet une erreur, il réalise qu'il est naturel de se tromper — et s'il est sincèrement désolé de ce qu'il a fait, il en tirera les leçons nécessaires et veillera à ne pas répéter la même erreur. S'il n'est pas sincèrement désolé et sait qu'il recommencera encore et encore, il n'a tout simplement pas à se confesser ni à demander un pardon de façade.</p>` 
+                        },
+                        { 
+                            title: "II. LE DIEU QUE VOUS SAUVEZ PEUT ÊTRE VOUS-MÊME", 
+                            text: `<p>TOUTES les religions de nature spirituelle sont des inventions de l'homme. Il a créé un système entier de dieux avec rien d'autre que son cerveau charnel. Juste parce qu'il a un ego, et qu'il ne peut pas l'accepter, il doit l'extérioriser dans un grand artefact spirituel qu'il appelle « Dieu ».</p>
+                            <p>Dieu peut faire toutes les choses qui sont interdites à l'homme — comme tuer des gens, accomplir des miracles pour satisfaire sa volonté, contrôler sans aucune responsabilité apparente, etc. Si l'homme a besoin d'un tel dieu et le reconnaît, alors il vénère une entité qu'un être humain a inventée. Par conséquent, IL ADORE PAR PROCURATION L'HOMME QUI A INVENTÉ DIEU. N'est-il pas plus sensé d'adorer un dieu qu'il a lui-même créé, conformément à ses propres besoins émotionnels — un dieu qui représente le mieux l'être charnel et physique qui possède la puissance d'invention d'un dieu ?</p>
+                            <p>Si l'homme persiste à extérioriser son véritable moi sous la forme de « Dieu », alors pourquoi craindre son véritable moi en craignant « Dieu » ? Pourquoi louer son véritable moi en louant « Dieu » ? Pourquoi rester séparé de « Dieu » pour s'engager dans des rituels et des cérémonies en son nom ?</p>
+                            <p>L'homme a besoin de rituels et de dogmes, mais aucune loi ne stipule qu'un dieu externe soit nécessaire pour y participer ! Quand l'homme ferme l'écart entre lui-même et sa divinité inventée, il voit surgir le démon de la fierté — l'incarnation de Lucifer apparaissant en son sein. Il ne se voit plus divisé, mais fusionne chair et esprit en un tout glorieux. Il découvre avec horreur qu'il n'est que chair, ET QU'IL L'A TOUJOURS ÉTÉ ! Alors, soit il se hait à mort jour après jour, soit il se réjouit d'être ce qu'il est ! S'il s'accepte, il comprend que le rituel et la cérémonie sont les outils précieux que ses religions inventées ont utilisés pour soutenir sa foi dans un mensonge, et que c'est la MÊME FORME DE RITUEL qui soutiendra sa foi dans la vérité — un spectacle primitif qui donnera de la substance à la conscience de sa propre majesté.</p>` 
+                        },
+                        { 
+                            title: "III. QUELQUES PREUVES D'UN NOUVEL ÂGE SATANIQUE", 
+                            text: `<p>Les sept péchés capitaux de l'Église chrétienne sont : l'avarice, l'orgueil, l'envie, la colère, la gourmandise, la luxure et la paresse. Le satanisme préconise de s'adonner à chacun de ces « péchés » car ils mènent tous à une gratification physique, mentale ou émotionnelle.</p>
+                            <p>Le sataniste sait qu'il n'y a rien de mal à être cupide, car cela signifie seulement qu'il veut plus que ce qu'il a déjà. L'envie consiste à regarder avec faveur les possessions des autres et à désirer obtenir des choses similaires pour soi-même. L'envie et l'avarice sont les moteurs de l'ambition, et sans ambition, très peu de choses d'importance seraient accomplies.</p>
+                            <p>La gourmandise consiste simplement à manger plus que nécessaire. Lorsque vous avez trop mangé au point d'en devenir obèse, un autre péché — l'orgueil — vous motivera à retrouver une apparence qui restaurera votre respect de vous-même. Quiconque achète un vêtement pour une raison autre que se couvrir et se protéger du froid est coupable d'orgueil. Les satanistes rencontrent souvent des moqueurs qui affirment que l'ornementation est inutile, mais chaque parure montre que ces cyniques sont eux aussi coupables d'orgueil. Peu importe la verbosité du cynique dans sa description intellectuelle de sa liberté, il porte toujours les éléments de la fierté.</p>
+                            <p>Être réticent à se lever le matin, c'est être coupable de paresse, et si vous restez au lit assez longtemps, vous risquez de commettre un autre péché — la luxure. Éprouver le moindre désir sexuel, c'est être coupable de luxure. Afin d'assurer la propagation de l'humanité, la nature a fait de la luxure le second instinct le plus puissant, le premier étant la préservation de soi. Réalisant cela, l'Église chrétienne a fait de la fornication le « péché originel », s'assurant ainsi que personne n'échapperait au péché.</p>
+                            <p>La colère est intimement liée à notre premier instinct de préservation de soi. Notre nature animale se rebelle face aux dogmes limitants. Le sataniste pratique la devise : « Si un homme te frappe sur une joue, frappe-le sur l'autre ! » Ne laissez aucune injustice impunie. Soyez dangereux même dans la défaite !</p>` 
+                        },
+                        { 
+                            title: "IV. L'ENFER, LE DIABLE, ET COMMENT VENDRE SON ÂME", 
+                            text: `<p>Satan a été le meilleur ami que l'Église ait jamais eu, car Il l'a maintenue en activité toutes ces années ! La fausse doctrine de l'Enfer et du Diable a permis aux Églises protestante et catholique de prospérer bien trop longtemps. Sans un diable vers lequel pointer du doigt, les religieux du sentier de la main droite n'auraient rien pour menacer leurs fidèles. « Satan vous mène à la tentation », « Satan est le prince du mal », « Satan est vicieux, cruel et brutal », préviennent-ils. « Si vous cédez aux tentations du diable, vous subirez la damnation éternelle et rôtirez en Enfer. »</p>
+                            <p>Le sens sémantique de Satan est « l'adversaire », « l'opposant » ou « l'accusateur ». Le mot même de « diable » dérive du sanskrit devi, qui signifie « dieu ». Satan représente l'opposition aux religions qui frustrent et condamnent l'homme pour ses instincts naturels. On lui a attribué un rôle maléfique simplement parce qu'il incarne l'aspect charnel, terrestre et mondain de la vie.</p>
+                            <p>Satan, le chef des démons du monde occidental, était à l'origine un ange dont le rôle était de rapporter les transgressions humaines à Dieu. Ce n'est qu'au XIVe siècle qu'il a commencé à être représenté comme une divinité maléfique mi-homme, mi-animale, dotée de cornes et de sabots de bouc. Avant que le christianisme ne lui attribue ces noms, la nature charnelle de l'homme était gouvernée par le dieu que les Grecs appelaient Dionysos ou Pan, représenté sous la forme d'un satyre. Pan était à l'origine le « gentil » et symbolisait la fertilité.</p>
+                            <p>Pour le sataniste, il est inutile de vendre son âme au Diable ou de faire un pacte avec Satan. Cette menace a été inventée par le christianisme pour terroriser les fidèles et les empêcher de s'éloigner du troupeau. Avec des doigts accusateurs et des voix tremblantes, ils ont enseigné que vivre selon ses inclinations naturelles revenait à donner son âme à Satan. On faisait croire aux gens qu'une âme pure était un passeport pour la vie éternelle.</p>
+                            <p>La déesse teutonne des morts et fille de Loki s'appelait Hel, une divinité païenne de la punition. Un autre « L » a été ajouté lorsque les livres de l'Ancien Testament ont été formulés. Les prophètes qui ont écrit la Bible ne connaissaient pas le mot « Enfer » ; ils utiliaient le Sheol hébreu et l'Hades grec, qui signifiaient la tombe, ou la Gehenna, une vallée près de Jérusalem où l'on brûlait les ordures. C'est de là que l'Église a tiré l'idée du feu et du soufre.</p>` 
+                        },
+                        { 
+                            title: "V. L'AMOUR ET LA HAINE", 
+                            text: `<p>Le satanisme représente la bonté pour ceux qui la méritent, au lieu de l'amour gaspillé pour des ingrats !</p>
+                            <p>Vous ne pouvez pas aimer tout le monde ; il est ridicule de penser que vous le pouvez. Si vous aimez tout le monde et tout, vous perdez vos pouvoirs naturels de sélection et finissez par être un très piètre juge de caractère et de qualité. Si quelque chose est utilisé trop librement, cela perd sa véritable signification. Par conséquent, le sataniste croit que vous devez aimer fortement et complètement ceux qui méritent votre amour, mais ne jamais tendre l'autre joue à votre ennemi !</p>
+                            <p>L'amour est l'une des émotions les plus intenses ressenties par l'homme ; l'autre est la haine. Se forcer à ressentir un amour aveugle est très contre-nature. Si vous essayez d'aimer tout le monde, vous ne faites que diminuer vos sentiments pour ceux qui méritent votre amour. La haine refoulée peut entraîner de nombreux maux physiques et émotionnels. En apprenant à libérer votre haine envers ceux qui la méritent, vous vous purifiez de ces émotions malignes et n'avez pas besoin de déverser votre haine accumulée sur vos proches.</p>
+                            <p>Il n'y a jamais eu de grand mouvement d'« amour » dans l'histoire du monde qui n'ait pas fini par tuer un nombre incalculable de personnes, nous devons le supposer, pour prouver à quel point ils les aimaient ! Chaque hypocrite qui a foulé la terre a eu des poches débordant d'amour !</p>
+                            <p>Chaque religieux pharisien prétend aimer ses ennemis, même si, lorsqu'il est lésé, il se console en pensant que « Dieu les punira ». Au lieu de s'avouer qu'ils sont capables de haïr leurs ennemis et de les traiter de la manière qu'ils méritent, ils disent : « Grâce à Dieu, je n'en suis pas là » et « prient » pour eux. Pourquoi devrions-nous nous humilier et nous rabaisser en établissant des comparaisons aussi inexactes ?</p>
+                            <p>On a pensé que le satanisme était synonyme de cruauté et de brutalité. Il en est ainsi uniquement parce que les gens ont peur d'affronter la vérité — et la vérité est que les êtres humains ne sont pas tous bienveillants ou aimants. Simplement parce que le sataniste admet qu'il est capable à la fois d'amour et de haine, il est considéré comme haineux. Au contraire, parce qu'il est capable de donner libre cours à sa haine par une expression ritualisée, he est bien plus capable d'amour — le type d'amour le plus profond. En reconnaissant et en admettant honnêtement la haine et l'amour qu'il ressent, il n'y a pas de confusion entre une émotion et l'autre. Sans être capable d'éprouver l'une de ces émotions, vous ne pouvez pas vivre pleinement l'autre.</p>` 
+                        },
+                        { 
+                            title: "VI. LA SEXUALITÉ SATANIQUE", 
+                            text: `<p>Beaucoup de controverses ont surgi autour de la vision satanique de la « liberté sexuelle ». On suppose souvent que l'activité sexuelle est le facteur le plus important de la religion satanique, et que la participation à des orgies est une condition préalable pour devenir sataniste. Rien n'est plus faux ! En fait, les opportunistes qui ne voient dans le satanisme qu'un prétexte sexuel sont vigoureusement découragés.</p>
+                            <p>Le satanisme encourage la liberté sexuelle, mais au sens authentique : la liberté d'être fidèle à une personne ou d'assouvir ses désirs avec autant de partenaires consentants que nécessaire pour combler ses propres besoins. Il n'encourage pas les orgies ou les liaisons extra-conjugales pour ceux pour qui cela n'est pas naturel.</p>
+                            <p>Le satanisme approuve toute activité sexuelle qui satisfait vos désirs individuels — qu'elle soit hétérosexuelle, homosexuelle, bisexuelle ou même asexuelle si vous le souhaitez. Le satanisme valide également tout fétichisme du moment qu'il n'implique aucune personne non consentante. Chacun doit décider pour lui-même de ce qui convient le mieux à ses besoins sexuels.</p>
+                            <p>La prévalence des comportements déviants ou fétichistes dans notre société dépasserait l'imagination des personnes sexuellement naïves. Tout le monde a un fétiche sous une forme ou une autre, mais la culpabilité sociale pousse souvent les gens à se croire dépravés lorsqu'ils cèdent à leurs penchants naturels.</p>
+                            <p>Le satanisme encourage toute expression sexuelle saine, du moment qu'elle ne nuit à personne d'autre. Par là, nous n'incluons pas la blessure involontaire ressentie par des proches pudiques en raison de leurs propres anxiétés morales. Cependant, le sataniste s'oppose fermement au viol, à la pédophilie et à l'abus d'animaux ou de personnes innocentes et incapables de donner un consentement libre et éclairé.</p>` 
+                        },
+                        { 
+                            title: "VII. TOUS LES VAMPIRES NE SUCENT PAS LE SANG !", 
+                            text: `<p>Le satanisme représente la responsabilité envers les personnes responsables, plutôt que la sollicitude pour les vampires psychiques.</p>
+                            <p>De nombreuses personnes pratiquent l'art de rendre les autres responsables et redevables envers elles sans raison. Le sataniste observe ces sangsues sous leur vrai jour. Les vampires psychiques drainent votre énergie vitale. On les trouve partout. Ils ne servent à rien et ne sont pas de véritables amis, pourtant nous nous sentons coupables de les rejeter.</p>
+                            <p>Si vous pensez être victime d'un vampire psychique, posez-vous ces questions : Vous sentez-vous obligé de rendre visite à quelqu'un alors que vous n'en avez pas envie, par simple peur de culpabiliser ? Faites-vous constamment des faveurs à quelqu'un qui ne formule pas de demande directe mais se contente d'insinuations ? Le vampire utilise souvent la psychologie inversée : « Oh, je n'oserais pas te demander ça... » et vous insistez pour le faire.</p>
+                            <p>Une grande partie de ces parasites ont des caractéristiques qui rendent leur hold-up émotionnel encore plus efficace : ils feignent la maladie, la faiblesse psychologique, l'incompétence ou l'ignorance pour que vous agissiez à leur place sous l'effet de la pitié ou de l'exaspération. Reconnaître ces méthodes est le seul moyen de briser leur emprise dévastatrice.</p>
+                            <p>Le seul moyen de neutraliser un vampire psychique est de faire l'idiot, d'agir comme s'il était purement altruiste, d'accepter ses faveurs sans jamais vous sentir redevable, et de savoir dire « Non » poliment mais fermement lorsqu'il tente de vous manipuler. Face à une personne responsable et imperméable à la culpabilité, le vampire passera son chemin vers une autre proie.</p>` 
+                        },
+                        { 
+                            title: "VIII. L'INDULGENCE... PAS LA COMPULSION", 
+                            text: `<p>Le satanisme encourage ses adeptes à satisfaire leurs désirs naturels. Ce n'est qu'ainsi que l'on peut être pleinement satisfait et exempt de frustrations néfastes. Par conséquent, la description la plus simple de la croyance satanique est : L'INDULGENCE PLUTÔT QUE L'ABSTINENCE.</p>
+                            <p>Les gens confondent souvent la compulsion et l'indulgence, mais il y a une différence fondamentale. La compulsion n'est jamais créée par l'indulgence, mais par l'interdiction de cette dernière. Faire d'une chose un tabou ne sert qu'à en intensifier le désir. « Les fruits défendus sont toujours les plus doux. »</p>
+                            <p>L'indulgence implique le choix et le libre arbitre, alors que la compulsion indique une absence de choix. Lorsque les désirs d'une personne n'ont pas d'exutoire sain, ils s'accumulent rapidement et se transforment en compulsions destructrices.</p>
+                            <p>Le véritable sataniste n'est pas l'esclave de ses plaisirs physiques ; il en est le maître. Il s'adonne pleinement à ses passions sans jamais basculer dans l'addiction ou la perte de contrôle, préservant ainsi sa souveraineté personnelle.</p>` 
+                        },
+                        { 
+                            title: "IX. SUR LE CHOIX D'UN SACRIFICE HUMAIN", 
+                            text: `<p>Le but supposé du sacrifice rituel est de libérer l'énergie bioélectrique et l'adrénaline dégagées lors de l'agonie de la victime dans l'atmosphère du temple magique, intensifiant les chances de succès du magicien.</p>
+                            <p>Le magicien blanc, terrifié par les conséquences d'un meurtre, utilise des oiseaux ou d'autres animaux inférieurs. Ces hypocrites ne ressentent aucune culpabilité à ôter une vie non-humaine. Pourtant, un magicien digne de ce nom devrait être capable de libérer cette force de son propre corps plutôt que de l'extirper d'une victime innocente et non consentante !</p>
+                            <p>Contrairement aux théories magiques établies, cette libération de force ne provient pas de l'écoulement du sang, mais de l'émotion violente et de l'excitation biologique de l'organisme. Le sataniste ne sacrifierait sous AUCUN prétexte un animal ou un enfant ! L'animal et l'enfant sont des êtres sacrés car ils incarnent la forme la plus pure de l'existence charnelle.</p>
+                            <p>La seule fois où un sataniste accomplit un sacrifice humain, c'est de manière purement symbolique : lors de rituels de colère, par le biais d'une malédiction dirigée contre un ennemi malveillant qui a activement cherché à vous nuire. Si votre rituel provoque sa perte matérielle ou psychologique, réjouissez-vous d'avoir débarrassé la terre d'une force nuisible.</p>` 
+                        },
+                        { 
+                            title: "X. LA VIE APRÈS LA MORT PAR L'ACCOMPLISSEMENT DE L'EGO", 
+                            text: `<p>L'homme sait qu'il doit mourir un jour. Les animaux luttent pour leur vie jusqu'à leur dernier souffle, et c'est cet instinct de conservation qui devrait habiter chaque être humain. Malheureusement, beaucoup abandonnent la lutte à cause des promesses fallacieuses des religions blanches.</p>
+                            <p>Cette vie terrestre est la seule que nous connaissons avec certitude. Le sataniste ne cherche pas son salut dans un au-delà hypothétique, mais s'efforce de marquer le monde présent par ses accomplissements. Notre immortalité réside dans l'impact de nos actes et la mémoire de notre ego puissant.</p>
+                            <p>Les philosophies orientales prêchent la dissolution de l'ego. Pour le sataniste, il est incompréhensible qu'un ego puisse vouloir sa propre destruction. L'ego fort donne le respect de soi nécessaire à une existence vitale. Si une personne a vécu intensément, c'est cet ego puissant qui refusera de s'éteindre et se projettera au-delà de la mort physique.</p>` 
+                        },
+                        { 
+                            title: "XI. LES FÊTES RELIGIEUSES", 
+                            text: `<p>La fête la plus importante de la religion satanique est la date de son propre anniversaire. C'est parce que chaque individu est sa propre divinité suprême. Adorer un dieu extérieur n'est qu'une forme d'auto-tromperie. Célébrez votre anniversaire avec autant de faste et de plaisir que possible !</p>
+                            <p>Après l'anniversaire individuel, les deux fêtes sataniques majeures sont la Walpurgisnacht (la nuit de mai, apogée du printemps et des anciens rituels de fertilité terrestres) et Halloween (All Hallows' Eve, la fête des esprits et des forces de la nuit).</p>
+                            <p>Les solstices et les équinoxes sont également célébrés en harmonie avec les cycles cosmiques de la nature, marquant le changement des saisons terrestres et l'évolution de la vie physique.</p>` 
+                        },
+                        { 
+                            title: "XII. LA MESSE NOIRE", 
+                            text: `<p>Aucun autre concept n'a été autant associé au satanisme que la messe noire. Pourtant, elle est historiquement une parodie thérapeutique des rites de l'Église romaine. Son but est de libérer le participant de la culpabilité résiduelle, des tabous et du conditionnement psychologique subis durant son éducation.</p>
+                            <p>Une messe noire moderne parodie les vaches sacrées contemporaines : l'extrême-libéralisme, la psychiatrie orthodoxe, les mouvements de conscience mystiques à la mode ou l'usage abusif des drogues psychoactives.</p>
+                            <p>Le sataniste n'effectue pas de messe noire par simple goût du blasphème puéril, mais pour restaurer l'indépendance de sa pensée et s'assurer que sa volonté est libérée des dogmes d'hier.</p>` 
+                        }
+                    ]
+                }
+            }
+        };
+
+        let currentLang = 'fr';
+        let bellTolls = 0;
+        let selectedStatement = null;
+        let activeBook = 'prologue'; 
+        let activeLuciferChapter = 0; 
+
+        // Audio Engine
+        let audioCtx = null;
+        let droneOscs = [];
+        let droneGain = null;
+        let filterNode = null;
+        let lfoOsc = null;
+        let isAmbienceOn = false;
+        let externalAudio = null;
+        
+        // Music Box Variables
+        let musicBoxTimeout = null;
+
+        // Custom element theme variables
+        let particleColor = { r: 217, g: 119, b: 6 }; // Default prologue amber/gold
+        let pulseGlowValue = 1; // Visual box pulse sync factor
+
+        function initAudio() {
+            if (!audioCtx) {
+                try {
+                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                } catch (e) {
+                    console.warn("Web Audio API not supported in this environment.", e);
+                    audioCtx = null;
+                }
+            }
+        }
+
+        function tollBell() {
+            if (bellTolls >= 9) return; 
+            
+            initAudio();
+            if (audioCtx && audioCtx.state === 'suspended') {
+                try {
+                    audioCtx.resume();
+                } catch(e) {}
+            }
+
+            bellTolls++;
+            
+            const indicator = document.getElementById('bellIndicator');
+            indicator.innerText = `PURIFIER (${bellTolls}/9)`;
+            indicator.classList.add('text-red-500', 'fire-text');
+            
+            // Play synthesized gong
+            try {
+                playBellSynth();
+            } catch(e) {}
+
+            // At exactly 9, lock interaction immediately and transition
+            if (bellTolls >= 9) {
+                document.getElementById('bellTrigger').classList.add('pointer-events-none');
+                setTimeout(() => {
+                    bypassIntro();
+                }, 500); 
+            } else {
+                setTimeout(() => {
+                    indicator.classList.remove('text-red-500', 'fire-text');
+                }, 300);
+            }
+        }
+
+        function playBellSynth() {
+            if (!audioCtx) return;
+            try {
+                const partials = [60, 112, 178, 224, 290, 360, 480, 520, 720];
+                const now = audioCtx.currentTime;
+
+                partials.forEach((freq, idx) => {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    
+                    osc.type = idx === 0 ? 'triangle' : 'sine';
+                    osc.frequency.setValueAtTime(freq, now);
+                    
+                    const duration = idx === 0 ? 5.5 : 4.0 / (idx + 0.6);
+                    gain.gain.setValueAtTime(idx === 0 ? 0.35 : 0.12, now);
+                    gain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+                    
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    
+                    osc.start(now);
+                    osc.stop(now + duration + 0.1);
+                });
+            } catch(e) {}
+        }
+
+        function bypassIntro() {
+            initAudio();
+            const overlay = document.getElementById('decompressionOverlay');
+            const main = document.getElementById('mainContent');
+            
+            overlay.classList.add('opacity-0', 'pointer-events-none');
+            main.classList.remove('opacity-0');
+            main.classList.add('opacity-100');
+            
+            setTimeout(() => {
+                overlay.style.display = 'none';
+            }, 1000);
+
+            initParticles();
+        }
+
+        // Play subtle bell chimes (FM metallic synthesize for Music Box)
+        /*
+        function playChimeNote(freq, startTime, duration) {
+            if (!audioCtx) return;
+            try {
+                const now = startTime;
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(freq, now);
+                
+                // Add second slightly detuned high carrier for metallic texture
+                const ringOsc = audioCtx.createOscillator();
+                const ringGain = audioCtx.createGain();
+                ringOsc.type = 'sine';
+                ringOsc.frequency.setValueAtTime(freq * 2.76, now); // Metallic non-harmonic ratio
+                
+                gain.gain.setValueAtTime(0, now);
+                gain.gain.linearRampToValueAtTime(0.08, now + 0.006);
+                gain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+                
+                ringGain.gain.setValueAtTime(0, now);
+                ringGain.gain.linearRampToValueAtTime(0.03, now + 0.006);
+                ringGain.gain.exponentialRampToValueAtTime(0.0001, now + duration * 0.4);
+                
+                osc.connect(gain);
+                ringOsc.connect(ringGain);
+                
+                gain.connect(audioCtx.destination);
+                ringGain.connect(audioCtx.destination);
+                
+                osc.start(now);
+                osc.stop(now + duration + 0.1);
+                
+                ringOsc.start(now);
+                ringOsc.stop(now + duration + 0.1);
+                
+                // Visual ripple sync
+                setTimeout(() => {
+                    pulseGlowValue = 1.0;
+                }, (startTime - audioCtx.currentTime) * 1000);
+                
+            } catch(e) {}
+        }
+
+        // Haunted music box pentatonic progression
+        function playMusicBoxMelody() {
+            if (!audioCtx || !isAmbienceOn) return;
+            try {
+                const now = audioCtx.currentTime;
+                // Minor notes: A5(880), B5(987.77), C6(1046.50), E6(1318.51)
+                const melody = [880, 1046.50, 1318.51, 987.77, 1046.50, 880, 1046.50, 987.77];
+                const beats = [0, 0.4, 0.8, 1.2, 1.6, 2.0, 2.4, 3.2];
+                const lengths = [1.5, 1.2, 1.5, 1.0, 1.2, 1.5, 1.0, 2.5];
+                
+                melody.forEach((freq, i) => {
+                    playChimeNote(freq, now + beats[i], lengths[i]);
+                });
+            } catch(e) {}
+        }
+
+        function scheduleMusicBox() {
+            if (!isAmbienceOn) return;
+            // Schedule the box to play periodically (every 18 to 35 seconds)
+            const randomDelay = 18000 + Math.random() * 17000;
+            musicBoxTimeout = setTimeout(() => {
+                playMusicBoxMelody();
+                scheduleMusicBox();
+            }, randomDelay);
+        }*/
+
+        // Organ Synth Ambient Loop control
+        function toggleAmbience() {
+            initAudio();
+            const toggleBtn = document.getElementById('soundToggle');
+            const wave = document.getElementById('soundWaves');
+            const text = document.getElementById('soundText');
+
+            if (!isAmbienceOn) {
+                if (AUDIO_CONFIG.useExternalFile) {
+                    try {
+                        if (!externalAudio) {
+                            externalAudio = new Audio();
+                            externalAudio.src = AUDIO_CONFIG.externalUrl;
+                            externalAudio.loop = true;
+                            externalAudio.volume = AUDIO_CONFIG.volume;
+                        }
+                        externalAudio.play().catch(e => console.log("External loop block fallback: ", e));
+                    } catch(e) {}
+                } else if (audioCtx) {
+                    try {
+                        const frequencies = [55.0, 82.4, 110.0, 130.8]; 
+                        droneOscs = [];
+
+                        droneGain = audioCtx.createGain();
+                        droneGain.gain.setValueAtTime(0, audioCtx.currentTime);
+                        
+                        filterNode = audioCtx.createBiquadFilter();
+                        filterNode.type = 'lowpass';
+                        filterNode.frequency.setValueAtTime(160, audioCtx.currentTime);
+                        filterNode.Q.setValueAtTime(2.5, audioCtx.currentTime);
+
+                        frequencies.forEach((freq, index) => {
+                            const osc = audioCtx.createOscillator();
+                            osc.type = index % 2 === 0 ? 'sawtooth' : 'triangle';
+                            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+                            osc.detune.setValueAtTime((Math.random() - 0.5) * 15, audioCtx.currentTime);
+                            
+                            osc.connect(filterNode);
+                            osc.start();
+                            droneOscs.push(osc);
+                        });
+
+                        lfoOsc = audioCtx.createOscillator();
+                        lfoOsc.frequency.setValueAtTime(0.12, audioCtx.currentTime); 
+                        
+                        const lfoGain = audioCtx.createGain();
+                        lfoGain.gain.setValueAtTime(45, audioCtx.currentTime); 
+                        
+                        lfoOsc.connect(lfoGain);
+                        lfoGain.connect(filterNode.frequency);
+                        lfoOsc.start();
+
+                        filterNode.connect(droneGain);
+                        droneGain.connect(audioCtx.destination);
+
+                        droneGain.gain.linearRampToValueAtTime(AUDIO_CONFIG.volume, audioCtx.currentTime + 3.0);
+                        
+                        // Fire off a music box sequence immediately and schedule future plays
+                        /*
+                        setTimeout(() => {
+                            playMusicBoxMelody();
+                        }, 1000);
+                        scheduleMusicBox();*/
+                        
+                    } catch(e) {}
+                }
+
+                isAmbienceOn = true;
+                text.innerText = currentLang === 'fr' ? "AMBIANCE : ON" : "AMBIANCE: ON";
+                text.classList.add('text-red-500');
+                wave.classList.add('bg-red-600', 'animate-pulse');
+                wave.classList.remove('bg-zinc-800');
+                updateAmbientState(activeBook);
+            } else {
+                if (AUDIO_CONFIG.useExternalFile) {
+                    if (externalAudio) {
+                        try { externalAudio.pause(); } catch(e) {}
+                    }
+                } else {
+                    if (droneGain && audioCtx) {
+                        try {
+                            droneGain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 1.2);
+                            clearTimeout(musicBoxTimeout);
+                            setTimeout(() => {
+                                droneOscs.forEach(osc => { try { osc.stop(); } catch(e){} });
+                                if (lfoOsc) { try { lfoOsc.stop(); } catch(e){} }
+                                droneOscs = [];
+                            }, 1300);
+                        } catch(e) {}
+                    }
+                }
+
+                isAmbienceOn = false;
+                text.innerText = currentLang === 'fr' ? "AMBIANCE : OFF" : "AMBIANCE: OFF";
+                text.classList.remove('text-red-500');
+                wave.classList.remove('bg-red-600', 'animate-pulse');
+                wave.classList.add('bg-zinc-800');
+            }
+        }
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            
+            const elEN = document.getElementById('langEN');
+            const elFR = document.getElementById('langFR');
+            
+            if (lang === 'en') {
+                elEN.classList.add('text-infernal-crimson', 'font-bold');
+                elEN.classList.remove('text-zinc-600');
+                elFR.classList.add('text-zinc-600');
+                elFR.classList.remove('text-infernal-crimson', 'font-bold');
+            } else {
+                elFR.classList.add('text-infernal-crimson', 'font-bold');
+                elFR.classList.remove('text-zinc-600');
+                elEN.classList.add('text-zinc-600');
+                elEN.classList.remove('text-infernal-crimson', 'font-bold');
+            }
+
+            document.title = CONTENT[currentLang].title;
+            document.getElementById('headerLogoText').innerText = CONTENT[currentLang].headerLogoText;
+            document.getElementById('overlayTitle').innerText = CONTENT[currentLang].overlayTitle;
+            document.getElementById('overlayDesc').innerText = CONTENT[currentLang].overlayDesc;
+            document.getElementById('altarLabel').innerText = CONTENT[currentLang].altarLabel;
+            document.getElementById('detailsLabel').innerText = CONTENT[currentLang].detailsLabel;
+            document.getElementById('footerCopyright').innerText = CONTENT[currentLang].footerCopyright;
+            document.getElementById('footerConcept').innerText = CONTENT[currentLang].footerConcept;
+            
+            // Dynamic Altar Translation
+            document.getElementById('altarText-prologue').innerText = CONTENT[currentLang].altar.prologue;
+            document.getElementById('altarText-satan').innerText = CONTENT[currentLang].altar.satan;
+            document.getElementById('altarSub-satan').innerText = CONTENT[currentLang].altar.satanSub;
+            
+            document.getElementById('altarText-lucifer').innerText = CONTENT[currentLang].altar.lucifer;
+            document.getElementById('altarSub-lucifer').innerText = CONTENT[currentLang].altar.luciferSub;
+
+            document.getElementById('altarText-belial').innerText = CONTENT[currentLang].altar.belial;
+            document.getElementById('altarSub-belial').innerText = CONTENT[currentLang].altar.belialSub;
+            document.getElementById('altarTeaser-belial').innerText = CONTENT[currentLang].altar.teaser;
+
+            document.getElementById('altarText-leviathan').innerText = CONTENT[currentLang].altar.leviathan;
+            document.getElementById('altarSub-leviathan').innerText = CONTENT[currentLang].altar.leviathanSub;
+            document.getElementById('altarTeaser-leviathan').innerText = CONTENT[currentLang].altar.teaser;
+
+            const text = document.getElementById('soundText');
+            if (isAmbienceOn) {
+                text.innerText = currentLang === 'fr' ? "AMBIANCE : ON" : "AMBIANCE: ON";
+            } else {
+                text.innerText = currentLang === 'fr' ? "AMBIANCE : OFF" : "AMBIANCE: OFF";
+            }
+
+            renderView();
+        }
+
+        function switchBook(bookKey) {
+            initAudio();
+            // Sound feedback for book switch
+            if (audioCtx) {
+                try {
+                    const now = audioCtx.currentTime;
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(110, now);
+                    gain.gain.setValueAtTime(0.05, now);
+                    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.4);
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start(now);
+                    osc.stop(now + 0.5);
+                } catch(e) {}
+            }
+
+            activeBook = bookKey;
+            
+            // Highlight altar items
+            document.getElementById('altar-prologue').classList.remove('goth-glow');
+            document.getElementById('altar-satan').classList.remove('goth-glow');
+            if (document.getElementById('altar-lucifer')) {
+                document.getElementById('altar-lucifer').classList.remove('goth-glow');
+            }
+            
+            const activeAltar = document.getElementById(`altar-${bookKey}`);
+            if (activeAltar) {
+                activeAltar.classList.add('goth-glow');
+            }
+
+            // Adapt visual properties & audio engine frequencies
+            updateAmbientState(bookKey);
+
+            renderView();
+        }
+
+        function updateAmbientState(bookKey) {
+            const root = document.documentElement;
+
+            if (bookKey === 'lucifer') {
+                particleColor = { r: 6, g: 182, b: 212 }; // Cyan for Air
+                root.style.setProperty('--scrollbar-color', '#06b6d4');
+                root.style.setProperty('--theme-text-glow', '#06b6d4');
+                root.style.setProperty('--theme-altar-glow', 'rgba(6, 182, 212, 0.4)');
+                root.style.setProperty('--theme-altar-border', 'rgba(6, 182, 212, 0.8)');
+                
+                // Whistling wind/aether sweep [AIR]
+                if (isAmbienceOn && audioCtx && droneOscs.length > 0) {
+                    try {
+                        const now = audioCtx.currentTime;
+                        droneOscs.forEach((osc, idx) => {
+                            osc.frequency.exponentialRampToValueAtTime([110.0, 164.8, 220.0, 261.6][idx], now + 1.2);
+                        });
+                    } catch(e) {}
+                }
+            } else if (bookKey === 'satan') {
+                particleColor = { r: 153, g: 0, b: 0 }; // Crimson for Fire
+                root.style.setProperty('--scrollbar-color', '#990000');
+                root.style.setProperty('--theme-text-glow', '#990000');
+                root.style.setProperty('--theme-altar-glow', 'rgba(153, 0, 0, 0.4)');
+                root.style.setProperty('--theme-altar-border', 'rgba(153, 0, 0, 0.8)');
+                
+                // Deep infernal growl [FIRE]
+                if (isAmbienceOn && audioCtx && droneOscs.length > 0) {
+                    try {
+                        const now = audioCtx.currentTime;
+                        droneOscs.forEach((osc, idx) => {
+                            osc.frequency.exponentialRampToValueAtTime([55.0, 82.4, 110.0, 130.8][idx], now + 1.2);
+                        });
+                    } catch(e) {}
+                }
+            } else {
+                particleColor = { r: 217, g: 119, b: 6 }; // Gold for Prologue/Spirit
+                root.style.setProperty('--scrollbar-color', '#d97706');
+                root.style.setProperty('--theme-text-glow', '#d97706');
+                root.style.setProperty('--theme-altar-glow', 'rgba(217, 119, 6, 0.4)');
+                root.style.setProperty('--theme-altar-border', 'rgba(217, 119, 6, 0.8)');
+                
+                // Grounded organic balance drone
+                if (isAmbienceOn && audioCtx && droneOscs.length > 0) {
+                    try {
+                        const now = audioCtx.currentTime;
+                        droneOscs.forEach((osc, idx) => {
+                            osc.frequency.exponentialRampToValueAtTime([73.4, 110.0, 146.8, 196.0][idx], now + 1.2);
+                        });
+                    } catch(e) {}
+                }
+            }
+        }
+
+        function selectLuciferChapter(idx) {
+            activeLuciferChapter = idx;
+            renderView();
+            // Sound cue for chapter selections
+            if (audioCtx) {
+                try {
+                    const now = audioCtx.currentTime;
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(330, now);
+                    gain.gain.setValueAtTime(0.02, now);
+                    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.3);
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start(now);
+                    osc.stop(now + 0.4);
+                } catch(e) {}
+            }
+        }
+
+        function getRomanNumeral(num) {
+            const romans = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII"];
+            return romans[num - 1] || num;
+        }
+
+        function renderView() {
+            const container = document.getElementById('bookView');
+            container.innerHTML = '';
+
+            if (activeBook === 'prologue') {
+                // RENDER PROLOGUE & STATEMENTS
+                const block = document.createElement('div');
+                block.innerHTML = `
+                    <section class="mb-24">
+                        <h1 class="font-cinzel text-center text-4xl md:text-5xl tracking-widest mb-2 blood-text">${CONTENT[currentLang].prologueHeader}</h1>
+                        <div class="w-16 h-0.5 bg-infernal-crimson mx-auto mb-12"></div>
+                        
+                        <div class="max-w-3xl mx-auto font-sans leading-relaxed text-zinc-400 space-y-6 text-justified font-light text-sm md:text-base">
+                            ${CONTENT[currentLang].prologue}
+                        </div>
+                        
+                        <div class="max-w-3xl mx-auto mt-16 flex flex-col items-center space-y-4 text-center">
+                            <span class="fire-text text-xl md:text-2xl py-1">REGIE SATANAS!</span>
+                            <span class="fire-text text-xl md:text-2xl py-1">AVE SATANAS!</span>
+                            <span class="fire-text text-xl md:text-2xl py-1">HAIL SATAN!</span>
+                        </div>
+                    </section>
+
+                    <section class="mb-20">
+                        <div class="text-center mb-16">
+                            <h2 class="font-cinzel text-2xl md:text-3xl text-zinc-100 tracking-widest leading-relaxed uppercase blood-text">
+                                ${CONTENT[currentLang].statementsHeader}
+                            </h2>
+                            <p class="text-zinc-600 font-cinzel text-xs tracking-widest mt-2 uppercase">${CONTENT[currentLang].statementsSubtitle}</p>
+                            <div class="w-12 h-0.5 bg-infernal-crimson mx-auto mt-6"></div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="statementsContainer">
+                            <!-- Injected dynamically inside block -->
+                        </div>
+                    </section>
+                `;
+                container.appendChild(block);
+
+                // Build Statements cards
+                const statementsContainer = document.getElementById('statementsContainer');
+                CONTENT[currentLang].statements.forEach((stmt) => {
+                    const card = document.createElement('div');
+                    card.className = `border border-zinc-900 bg-infernal-900/40 p-6 rounded-lg cursor-pointer transition-all duration-300 hover:border-infernal-crimson/50 hover:bg-infernal-800/10 group flex flex-col justify-between ${selectedStatement === stmt.num ? 'border-infernal-crimson bg-infernal-800/20 shadow-inner' : ''}`;
+                    card.setAttribute('onclick', `showDetails(${stmt.num})`);
+
+                    card.innerHTML = `
+                        <div class="space-y-4">
+                            <div class="flex justify-between items-center">
+                                <span class="font-cinzel text-[10px] text-zinc-600 group-hover:text-infernal-crimson transition-colors duration-300 tracking-wider">DECLARATION ${stmt.num}</span>
+                                <span class="text-xs text-infernal-crimson ${selectedStatement === stmt.num ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'} transition-opacity duration-300">🜏</span>
+                            </div>
+                            <p class="font-cinzel text-sm text-zinc-300 leading-relaxed group-hover:text-zinc-100 transition-colors duration-300">
+                                ${stmt.text}
+                            </p>
+                        </div>
+                        <div class="mt-4 pt-4 border-t border-zinc-950 flex justify-between items-center text-[10px] tracking-widest font-cinzel text-zinc-600 group-hover:text-zinc-400">
+                            <span>${CONTENT[currentLang].cardReadMore}</span>
+                            <span>→</span>
+                        </div>
+                    `;
+                    statementsContainer.appendChild(card);
+                });
+
+            } else if (activeBook === 'satan') {
+                // RENDER LIBER SATAN
+                const bookData = CONTENT[currentLang].bookSatan;
+                const block = document.createElement('div');
+                block.className = "max-w-3xl mx-auto mb-20";
+
+                let chaptersHtml = '';
+                bookData.chapters.forEach((chap) => {
+                    let versesHtml = '';
+                    chap.verses.forEach((verse, index) => {
+                        versesHtml += `
+                            <div class="flex space-x-4 items-start">
+                                <span class="font-cinzel text-xs text-zinc-600 pt-1 font-bold">${index + 1}.</span>
+                                <p class="text-sm md:text-base text-zinc-400 font-light leading-relaxed text-justified">${verse}</p>
+                            </div>
+                        `;
+                    });
+
+                    chaptersHtml += `
+                        <div class="mb-16 border border-zinc-900/60 bg-infernal-900/10 p-6 md:p-8 rounded-lg">
+                            <h3 class="font-cinzel text-center text-xl tracking-widest mb-6 text-zinc-200">CHAPITRE / CHAPTER ${chap.num}</h3>
+                            <div class="space-y-6">
+                                ${versesHtml}
+                            </div>
+                        </div>
+                    `;
+                });
+
+                block.innerHTML = `
+                    <div class="text-center mb-12">
+                        <span class="text-sm tracking-widest font-cinzel text-infernal-crimson font-black fire-text">🜂</span>
+                        <h1 class="font-cinzel text-4xl md:text-5xl tracking-widest mt-2 mb-1 blood-text">${bookData.title}</h1>
+                        <p class="text-zinc-500 font-cinzel text-xs tracking-widest uppercase">${bookData.subtitle}</p>
+                        <div class="w-16 h-0.5 bg-infernal-crimson mx-auto mt-4 mb-8"></div>
+                        <p class="max-w-md mx-auto text-xs text-zinc-500 font-light leading-relaxed">${bookData.intro}</p>
+                    </div>
+
+                    ${chaptersHtml}
+                `;
+                container.appendChild(block);
+            } else if (activeBook === 'lucifer') {
+                // RENDER LIBER LUCIFER (THE ENLIGHTENMENT WITH SCROLLABLE SIDEBAR CONTENT)
+                const bookData = CONTENT[currentLang].bookLucifer;
+                const block = document.createElement('div');
+                block.className = "max-w-5xl mx-auto mb-20 animate-fade-in";
+
+                let chaptersIndexHtml = '';
+                bookData.chapters.forEach((chap, idx) => {
+                    const isSelected = idx === activeLuciferChapter;
+                    const romanNum = getRomanNumeral(idx + 1);
+                    chaptersIndexHtml += `
+                        <button onclick="selectLuciferChapter(${idx})" class="w-full text-left py-2.5 px-3 rounded text-[11px] font-cinzel tracking-wider transition-all duration-300 flex items-center justify-between ${
+                            isSelected 
+                            ? 'bg-cyan-950/40 text-cyan-400 border border-cyan-800' 
+                            : 'text-zinc-500 hover:text-zinc-300 hover:bg-zinc-900/40 border border-transparent'
+                        }">
+                            <span>${romanNum}. ${chap.title.replace(/^[VIX]+\.\s*/, '')}</span>
+                            <span class="text-[9px] ${isSelected ? 'opacity-100 text-cyan-400' : 'opacity-0'}">🜁</span>
+                        </button>
+                    `;
+                });
+
+                const activeChap = bookData.chapters[activeLuciferChapter];
+
+                block.innerHTML = `
+                    <div class="text-center mb-12">
+                        <span class="text-sm tracking-widest font-cinzel text-cyan-500 font-black">🜁</span>
+                        <h1 class="font-cinzel text-4xl md:text-5xl tracking-widest mt-2 mb-1 text-zinc-100" style="text-shadow: 0 0 10px rgba(6, 182, 212, 0.4);">${bookData.title}</h1>
+                        <p class="text-zinc-500 font-cinzel text-xs tracking-widest uppercase">${bookData.subtitle}</p>
+                        <div class="w-16 h-0.5 bg-cyan-500 mx-auto mt-4 mb-8"></div>
+                        <p class="max-w-xl mx-auto text-xs text-zinc-500 font-light leading-relaxed text-justified">${bookData.intro}</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
+                        <!-- Sidebar Index -->
+                        <div class="md:col-span-1 border border-zinc-900 bg-zinc-950/60 p-4 rounded-lg space-y-1">
+                            <h3 class="font-cinzel text-[10px] text-zinc-600 tracking-wider uppercase border-b border-zinc-900 pb-2 mb-3">ESSAYS INDEX</h3>
+                            <div class="space-y-1 max-h-[420px] overflow-y-auto pr-1">
+                                ${chaptersIndexHtml}
+                            </div>
+                        </div>
+
+                        <!-- Active Essay Content with customized native styling -->
+                        <div class="md:col-span-2 border border-cyan-900/40 bg-zinc-950/60 p-6 md:p-8 rounded-lg relative min-h-[420px] max-h-[500px] overflow-y-auto goth-scroller flex flex-col justify-between">
+                            <div>
+                                <span class="absolute top-4 right-4 text-xs text-cyan-700 font-cinzel">🜁</span>
+                                <div class="border-b border-zinc-900 pb-3 mb-6">
+                                    <span class="font-cinzel text-[9px] text-cyan-500 tracking-widest uppercase">ESSAY ${getRomanNumeral(activeLuciferChapter + 1)}</span>
+                                    <h2 class="font-cinzel text-xl text-zinc-200 mt-1 leading-relaxed">${activeChap.title}</h2>
+                                </div>
+                                <div class="font-sans leading-relaxed text-zinc-400 text-justified font-light text-sm md:text-base space-y-5">
+                                    ${activeChap.text}
+                                </div>
+                            </div>
+                            <div class="mt-8 pt-4 border-t border-zinc-900/40 flex justify-between items-center text-[9px] font-cinzel text-zinc-600">
+                                <span>The Satanic Bible - Lucifer</span>
+                                <span>[AIR] Element</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(block);
+            }
+        }
+
+        function showDetails(num) {
+            initAudio();
+            if (audioCtx) {
+                try {
+                    const now = audioCtx.currentTime;
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(330 + (num * 33), now); 
+                    gain.gain.setValueAtTime(0.03, now);
+                    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.6);
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start(now);
+                    osc.stop(now + 0.7);
+                } catch(e) {}
+            }
+
+            selectedStatement = num;
+            const stmt = CONTENT[currentLang].statements.find(s => s.num === num);
+
+            document.getElementById('detailsTitle').innerText = stmt.text;
+            document.getElementById('detailsContent').innerText = stmt.explication;
+
+            const panel = document.getElementById('detailsPanel');
+            panel.classList.remove('hidden');
+            setTimeout(() => {
+                panel.classList.remove('translate-y-full');
+            }, 10);
+
+            renderView();
+        }
+
+        function closeDetails() {
+            selectedStatement = null;
+            const panel = document.getElementById('detailsPanel');
+            panel.classList.add('translate-y-full');
+            setTimeout(() => {
+                panel.classList.add('hidden');
+            }, 500);
+
+            renderView();
+        }
+
+        let canvas, ctx, particles = [];
+
+        function initParticles() {
+            canvas = document.getElementById('particleCanvas');
+            ctx = canvas.getContext('2d');
+            resizeCanvas();
+
+            window.addEventListener('resize', resizeCanvas);
+
+            for (let i = 0; i < 50; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    size: Math.random() * 1.5 + 0.4,
+                    speedX: (Math.random() - 0.5) * 0.1,
+                    speedY: -Math.random() * 0.25 - 0.05,
+                    alpha: Math.random() * 0.4 + 0.08,
+                    oscillation: Math.random() * 100,
+                    oscillationSpeed: Math.random() * 0.04 + 0.01
+                });
+            }
+
+            animateParticles();
+        }
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw a temporary beautiful glowing circle when FM notes are triggered
+            if (pulseGlowValue > 0) {
+                ctx.strokeStyle = `rgba(${particleColor.r}, ${particleColor.g}, ${particleColor.b}, ${pulseGlowValue * 0.15})`;
+                ctx.lineWidth = 1.5;
+                ctx.beginPath();
+                ctx.arc(canvas.width / 2, canvas.height / 2, (1 - pulseGlowValue) * Math.max(canvas.width, canvas.height) * 0.75, 0, Math.PI * 2);
+                ctx.stroke();
+                pulseGlowValue -= 0.012; // Gradual fadeout
+            }
+            
+            particles.forEach((p) => {
+                ctx.fillStyle = `rgba(${particleColor.r}, ${particleColor.g}, ${particleColor.b}, ${p.alpha})`; 
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fill();
+
+                if (activeBook === 'lucifer') {
+                    // Air Element: slow swirling horizontal wind movement
+                    p.x += Math.sin(p.oscillation) * 0.3 + 0.18; 
+                    p.y += p.speedY * 0.55;
+                } else {
+                    p.x += p.speedX;
+                    p.y += p.speedY;
+                }
+
+                p.oscillation += p.oscillationSpeed;
+
+                if (p.y < -10) {
+                    p.y = canvas.height + 10;
+                    p.x = Math.random() * canvas.width;
+                }
+                if (p.x < -10 || p.x > canvas.width + 10) {
+                    p.x = Math.random() * canvas.width;
+                }
+            });
+
+            requestAnimationFrame(animateParticles);
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            setLanguage('fr');
+            switchBook('prologue');
+        });
+    </script>
+</body>
+</html>
